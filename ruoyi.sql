@@ -70,8 +70,8 @@ ENGINE=InnoDB;
 -- ----------------------------
 -- 初始化-用户信息表数据
 -- ----------------------------
-insert into sys_user values(1,  103, 'admin', '系统管理员', '00', 'admin@example.com', '00000000000', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '127.0.0.1', sysdate(), '0', 'admin', sysdate(), '', null, null, '管理员');
-insert into sys_user values(2,  105, 'demo',  '示例用户',   '00', 'demo@example.com',  '00000000000', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '127.0.0.1', sysdate(), '0', 'admin', sysdate(), '', null, null, '测试用户');
+insert into sys_user values(1,  103, 'admin', '系统管理员', '00', 'admin@example.com', '00000000000', '1', '', '$2a$10$shbOl8hKKQQ6EUjIEBXhk.mR8ztUKhP7Df4UixTjXMu/ylfhAf.6i', '127.0.0.1', sysdate(), '0', 'admin', sysdate(), '', null, null, '管理员');
+insert into sys_user values(2,  105, 'demo',  '示例用户',   '00', 'demo@example.com',  '00000000000', '1', '', '$2a$10$shbOl8hKKQQ6EUjIEBXhk.mR8ztUKhP7Df4UixTjXMu/ylfhAf.6i', '127.0.0.1', sysdate(), '0', 'admin', sysdate(), '', null, null, '测试用户');
 
 -- ----------------------------
 -- 3、岗位信息表
@@ -524,7 +524,7 @@ ENGINE=InnoDB;
 -- 初始化-参数配置表数据
 -- ----------------------------
 insert into sys_config values(1, '主框架页-默认皮肤样式名称',     'sys.index.skinName',            'skin-blue',     'Y', 'admin', sysdate(), '', null, '蓝色 skin-blue、绿色 skin-green、紫色 skin-purple、红色 skin-red、黄色 skin-yellow' );
-insert into sys_config values(2, '用户管理-账号初始密码',         'sys.user.initPassword',         '123456',        'Y', 'admin', sysdate(), '', null, '初始化密码 123456' );
+insert into sys_config values(2, '用户管理-账号初始密码',         'sys.user.initPassword',         'change-me-before-production', 'Y', 'admin', sysdate(), '', null, '初始化密码请在部署前修改' );
 insert into sys_config values(3, '主框架页-侧边栏主题',           'sys.index.sideTheme',           'theme-dark',    'Y', 'admin', sysdate(), '', null, '深色主题theme-dark，浅色主题theme-light' );
 insert into sys_config values(4, '账号自助-验证码开关',           'sys.account.captchaEnabled',    'true',          'Y', 'admin', sysdate(), '', null, '是否开启验证码功能（true开启，false关闭）');
 insert into sys_config values(5, '账号自助-是否开启用户注册功能', 'sys.account.registerUser',      'false',         'Y', 'admin', sysdate(), '', null, '是否开启注册用户功能（true开启，false关闭）');
