@@ -354,7 +354,7 @@ func (*UserController) ImportTemplate(ctx *gin.Context) {
 		UserName:    "example",
 		NickName:    "模板",
 		Email:       "example@example.com",
-		Phonenumber: "12345678901",
+		Phonenumber: "00000000000",
 		Sex:         "1",
 		Status:      "0",
 	})
