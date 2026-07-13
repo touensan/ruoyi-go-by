@@ -9,6 +9,36 @@
 - 后端：Go 1.25+、Gin、GORM、MySQL、Redis、JWT、excelize
 - 前端：Vue 3、Vite、TypeScript、Element Plus、Pinia、Vue Router、Axios
 
+## 功能差异
+
+在 RuoYi 基础能力之外，本项目重点补充了以下后台功能：
+
+- **聚合系统配置**：在一个后台入口中提供站点、支付和邮箱三个配置标签页，支持 SEO、版权、Logo、备案和客服信息维护。
+- **支付配置与测试**：支持易支付 V1/V2，使用复选框配置支付宝和微信支付，并提供回调地址生成和功能测试入口；示例配置不包含任何商户密钥。
+- **邮箱配置与测试**：支持 SMTP、QQ 邮箱、Gmail 和自定义服务器，提供邮件发送测试，同时默认不填写任何真实凭据。
+- **代码生成工作台**：提供数据表筛选、导入、预览、同步、生成和下载入口，前端使用 Element Plus 管理界面。
+- **Go 原生运行**：后端以单个 Go 服务运行，保留 MySQL、Redis、JWT、文件上传和常见系统管理能力。
+
+## 界面预览
+
+以下截图使用 Chromium 在本地脱敏前端和演示数据生成，不包含生产账号或真实业务数据。
+
+### 后台首页
+
+![后台首页](docs/screenshots/dashboard.png)
+
+### 系统设置
+
+![系统设置](docs/screenshots/system-settings.png)
+
+### 支付配置
+
+![支付配置](docs/screenshots/payment-settings.png)
+
+### 代码生成
+
+![代码生成](docs/screenshots/code-generator.png)
+
 ## 后端运行
 
 ```bash
