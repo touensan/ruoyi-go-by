@@ -1,0 +1,40 @@
+# Copy this file to application.yaml and adjust values for your environment.
+# Never commit application.yaml or production credentials.
+ruoyi:
+  name: RuoYi-Go BY
+  version: 1.1.2
+  copyright: 2026
+  domain: localhost:6555
+  ssl: false
+  uploadPath: runtime/uploads/
+
+server:
+  host: 127.0.0.1
+  port: 6555
+  mode: debug
+
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  database: ruoyi_go_by
+  username: root
+  password: ""
+  charset: utf8mb4
+  maxIdleConns: 10
+  maxOpenConns: 100
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  database: 0
+  password: ""
+
+token:
+  header: Authorization
+  secret: change-this-secret-before-production
+  expireTime: 30
+
+user:
+  password: change-me-before-production
+  maxRetryCount: 5
+  lockTime: 10

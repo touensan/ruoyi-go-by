@@ -1,0 +1,43 @@
+# OS/editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Go build/test output
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+/ruoyi-go-by
+
+# Dependencies and generated frontend output
+vendor/
+frontend/RuoYi-Vue3-ts/node_modules/
+frontend/RuoYi-Vue3-ts/dist/
+frontend/RuoYi-Vue3-ts/build/
+
+# Runtime data and logs
+runtime/
+web/upload/
+*.log
+*.pid
+*.db
+*.sqlite
+*.sqlite3
+
+# Local configuration and credentials
+application.yaml
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+*.crt
+
+# Local helper files
+ai_codex.md
+ui_codex.md
