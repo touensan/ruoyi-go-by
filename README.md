@@ -30,19 +30,19 @@
 
 ### 后台首页
 
-![后台首页](docs/screenshots/dashboard.png)
+![后台首页](docs/screenshots/whiteyun-vue-dashboard.png)
 
 ### 系统设置
 
-![系统设置](docs/screenshots/system-settings.png)
+![系统设置](docs/screenshots/whiteyun-vue-system-settings.png)
 
 ### 支付配置
 
-![支付配置](docs/screenshots/payment-settings.png)
+![支付配置](docs/screenshots/whiteyun-vue-payment-settings.png)
 
 ### 菜单管理
 
-![菜单管理](docs/screenshots/menu-management.png)
+![菜单管理](docs/screenshots/whiteyun-vue-menu-management.png)
 
 ## 后端运行
 
