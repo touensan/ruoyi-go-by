@@ -4,10 +4,15 @@
 
 本仓库是一个可独立运行的开源代码副本，默认配置仅用于本地开发。部署前请修改数据库、Redis、JWT 密钥和所有默认账号配置。
 
+管理端现已默认使用 `Whiteyun Vue`（白云风格前端）。原有 `RuoYi Vue`
+仍保留在仓库中供旧项目兼容选择，但后续功能、适配和视觉更新只维护
+`Whiteyun Vue`。
+
 ## 技术栈
 
-- 后端：Go 1.25+、Gin、GORM、MySQL、Redis、JWT、excelize
-- 前端：Vue 3、Vite、TypeScript、Element Plus、Pinia、Vue Router、Axios
+- 后端：Go 1.25+、Gin、GORM、MySQL 5.7+（兼容 MySQL 8）、Redis、JWT、excelize
+- 默认前端：Whiteyun Vue、Vue 3、Vite、TypeScript、Element Plus、Pinia、Vue Router、Axios
+- 兼容前端：RuoYi Vue，仅保留旧视觉与旧二次开发兼容
 
 ## 功能差异
 
@@ -21,7 +26,7 @@
 
 ## 界面预览
 
-以下截图使用 Chromium 在本地脱敏前端和演示数据生成，不包含生产账号或真实业务数据。
+以下截图来自 [白云 R1-Go 演示站](https://r1-go.whiteyun.com/)，截图中的支付字段已脱敏，不包含生产账号、密钥或真实业务数据。
 
 ### 后台首页
 
@@ -35,9 +40,9 @@
 
 ![支付配置](docs/screenshots/payment-settings.png)
 
-### 代码生成
+### 菜单管理
 
-![代码生成](docs/screenshots/code-generator.png)
+![菜单管理](docs/screenshots/menu-management.png)
 
 ## 后端运行
 
@@ -50,19 +55,29 @@ go run main.go
 
 ## 前端运行
 
+默认使用持续维护的 Whiteyun Vue：
+
 ```bash
-cd frontend/RuoYi-Vue3-ts
+cd frontend/whiteyun-vue
 cp .env.example .env.development
-npm install
+npm ci
 npm run dev
 ```
+
+需要旧若依视觉时，可改用 `frontend/ruoyi-vue`。两套前端的定位和构建方式见
+[frontend/README.md](frontend/README.md)。
 
 ## 构建
 
 ```bash
 go build -o ruoyi-go-by main.go
-cd frontend/RuoYi-Vue3-ts
-npm run build:prod
+frontend/build-admin.sh
+```
+
+如需构建冻结的旧版前端：
+
+```bash
+APIAUTH_ADMIN_FRONTEND=ruoyi-vue frontend/build-admin.sh
 ```
 
 ## 数据库

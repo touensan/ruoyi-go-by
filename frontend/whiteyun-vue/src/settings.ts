@@ -62,5 +62,5 @@ export default {
   /**
    * 底部版权文本内容
    */
-  footerContent: '© 2026 APIAuth 授权服务'
+  footerContent: '© 2026 Whiteyun Vue 管理控制台'
 }

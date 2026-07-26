@@ -1,10 +1,10 @@
 <template>
   <div class="login">
     <header class="login-header">
-      <a href="/" class="login-brand" aria-label="返回 APIAuth 官网">APIAuth</a>
+      <a href="/" class="login-brand" :aria-label="`${appTitle} 首页`">{{ appTitle }}</a>
       <nav class="login-nav" aria-label="辅助导航">
-        <a href="/">官网首页</a>
-        <a href="/docs/">接入文档</a>
+        <a href="/">演示首页</a>
+        <a href="https://github.com/touensan/ruoyi-go-by" target="_blank" rel="noreferrer">项目仓库</a>
         <div class="theme-segmented" role="group" aria-label="界面主题">
           <button type="button" :class="{ active: !settingsStore.isDark }" @click="settingsStore.setTheme(false)">日间</button>
           <button type="button" :class="{ active: settingsStore.isDark }" @click="settingsStore.setTheme(true)">夜间</button>
@@ -15,21 +15,21 @@
     <main class="login-shell">
       <section class="login-story">
         <div class="story-copy">
-          <span class="release-badge"><i></i> 授权服务运行中</span>
-          <p class="eyebrow">APIAuth 授权控制中心</p>
-          <h1>软件授权<br>一处管理</h1>
-          <p class="story-summary">创建应用与授权方案，签发许可证，并管理激活、续期、暂停与吊销。</p>
+          <span class="release-badge"><i></i> Whiteyun Vue 已启用</span>
+          <p class="eyebrow">{{ appTitle }} 管理控制台</p>
+          <h1>清晰管理<br>高效协作</h1>
+          <p class="story-summary">基于 Go、Vue 3 与 RuoYi 权限模型构建的通用后台管理底座。</p>
           <div class="capability-list" aria-label="产品能力">
-            <span>在线激活</span>
-            <span>离线授权</span>
-            <span>三态验权</span>
-            <span>Ed25519</span>
+            <span>用户权限</span>
+            <span>系统配置</span>
+            <span>操作审计</span>
+            <span>代码生成</span>
           </div>
         </div>
         <div class="cube-visual" aria-hidden="true">
           <img :src="cubeVisualUrl" alt="">
           <div class="visual-status">
-            <span><i></i>许可证运营台</span>
+            <span><i></i>系统控制台</span>
             <strong>运行正常</strong>
           </div>
         </div>
@@ -89,7 +89,7 @@
             <router-link v-if="register" class="link-type" :to="'/register'">立即注册</router-link>
           </el-form-item>
         </el-form>
-        <p class="login-note">账号由平台管理员开通；许可证用户无需登录此处。</p>
+        <p class="login-note">请使用管理员分配的账号登录；生产部署前务必更换示例凭据。</p>
       </section>
     </main>
 
@@ -105,11 +105,12 @@ import Cookies from "js-cookie"
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
 import defaultSettings from '@/settings'
-import cubeVisualUrl from '../../../site-resend-preview/static/cube-fallback.jpg'
+import cubeVisualUrl from '@/assets/images/login-background.jpg'
 import type { CaptchaInfoResult } from '@/types/api/login'
 import type { LoginForm } from '@/types/api/login'
 
 const footerContent = defaultSettings.footerContent
+const appTitle = import.meta.env.VITE_APP_TITLE || 'Whiteyun Vue'
 const userStore = useUserStore()
 const settingsStore = useSettingsStore()
 const route = useRoute()

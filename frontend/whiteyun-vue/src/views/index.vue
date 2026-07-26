@@ -2,14 +2,14 @@
   <div class="app-container home">
     <section class="intro-panel">
       <div class="intro-copy">
-        <p class="product-code">授权服务控制台 · {{ productVersion }}</p>
-        <h1>授权业务概览</h1>
+        <p class="product-code">Whiteyun Vue · {{ productVersion }}</p>
+        <h1>白云 R1-Go</h1>
         <p class="product-summary">
-          统一管理应用、授权方案、许可证和运行状态，让签发、激活、续期、暂停与吊销保持清晰可追溯。
+          以 Go 生态和 RuoYi 权限模型为基础，配套持续维护的白云风格 Vue 3 管理前端。
         </p>
         <div class="intro-actions">
-          <el-button class="intro-primary-action" type="primary" @click="goAuthorization">
-            <span>进入授权管理</span>
+          <el-button class="intro-primary-action" type="primary" @click="openProject">
+            <span>访问项目仓库</span>
             <el-icon><ArrowRight /></el-icon>
           </el-button>
           <el-tag class="intro-version-tag" effect="plain">当前版本 {{ productVersion }}</el-tag>
@@ -18,16 +18,16 @@
 
       <div class="runtime-box">
         <div>
-          <span>运行环境</span>
-          <strong>生产试运行</strong>
+          <span>后端基线</span>
+          <strong>Go + Gin</strong>
         </div>
         <div>
-          <span>公开协议</span>
-          <strong>/api/license/v1</strong>
+          <span>数据库基线</span>
+          <strong>MySQL 5.7+</strong>
         </div>
         <div>
-          <span>管理域名</span>
-          <el-link :href="adminOrigin" target="_blank" type="primary">apiauth.whiteyun.com</el-link>
+          <span>演示站点</span>
+          <el-link :href="demoOrigin" target="_blank" type="primary">r1-go.whiteyun.com</el-link>
         </div>
       </div>
     </section>
@@ -35,7 +35,7 @@
     <section class="stack-section">
       <div class="section-heading">
         <h2>技术栈</h2>
-        <p>后端负责许可证、签名租约与公开协议，管理端负责商业目录、许可证、运行态、密钥和审计。</p>
+        <p>保留成熟的用户、角色、菜单、配置、日志与代码生成能力，并升级主题和响应式体验。</p>
       </div>
 
       <el-row :gutter="16">
@@ -55,7 +55,7 @@
     <section class="changelog-section">
       <div class="section-heading">
         <h2>更新日志</h2>
-        <p>记录 APIAuth 的版本演进，只保留本项目的真实变更。</p>
+        <p>记录 RuoYi-Go BY 与 Whiteyun Vue 的真实版本演进。</p>
       </div>
 
       <el-scrollbar class="changelog-scroll" max-height="260px">
@@ -94,15 +94,15 @@
 </template>
 
 <script setup lang="ts">
-const router = useRouter()
-const productVersion = '1.0.0-rc.1'
-const adminOrigin = 'https://apiauth.whiteyun.com/admin/'
+const productVersion = '1.2.0'
+const projectUrl = 'https://github.com/touensan/ruoyi-go-by'
+const demoOrigin = 'https://r1-go.whiteyun.com/'
 const activeLog = ref<string>('')
 
 const stackGroups = [
   {
     title: '后端技术',
-    items: ['Go 1.26.5', 'Gin 1.12', 'GORM 1.31', 'MySQL 5.7+', '兼容 MySQL 8', 'Redis 7', 'Ed25519', 'JWT v5']
+    items: ['Go 1.25+', 'Gin 1.12', 'GORM 1.31', 'MySQL 5.7+', '兼容 MySQL 8', 'Redis 5/6/7', 'JWT v5']
   },
   {
     title: '前端技术',
@@ -110,43 +110,43 @@ const stackGroups = [
   },
   {
     title: '部署运行',
-    items: ['宝塔与 Nginx', 'systemd', '单二进制服务', '静态资源内置', '本机数据服务', '签名备份与恢复']
+    items: ['Nginx 反向代理', '宝塔面板', '单二进制服务', '静态资源发布', '本地动态配置', '备份与回档']
   }
 ]
 
 const changelog = [
   {
-    version: '1.0.0-rc.1',
-    date: '2026-07-25',
-    title: '生产试运行候选',
-    status: '当前候选',
+    version: 'v1.2.0',
+    date: '2026-07-26',
+    title: 'Whiteyun Vue 成为默认前端',
+    status: '当前版本',
     current: true,
-    summary: '统一授权后台、公开协议、三语言 SDK、离线签名与生产运维能力进入试运行验收。',
+    summary: '新增独立维护的 Whiteyun Vue 前端，同时保留冻结的 RuoYi Vue 兼容版本。',
     items: [
-      '管理应用、版本、权益、套餐、许可证、运行态、签名密钥和授权审计。',
-      '公开授权 API 支持激活、刷新、解绑、公钥集、离线请求与更新检查。',
-      'Go、PHP/WordPress、Java SDK 共享 Ed25519 签名租约与三态验证语义。',
-      '许可证与安装凭据只存摘要，完整许可证仅在受控签发或替换响应中显示一次。',
-      'Nginx、systemd、MySQL 8、Redis 7、备份恢复与监控基线已部署；程序以 MySQL 5.7+ 为兼容基准。'
+      '重做管理端日间与夜间配色，统一侧边栏、顶部导航、标签页、表单和弹层。',
+      '三种导航布局均可随主题正确切换，桌面、平板和手机端保持可用。',
+      '登录页、后台首页、系统配置与代码生成页面共享同一套视觉变量。',
+      '默认构建入口切换到 frontend/whiteyun-vue，历史路径继续兼容旧脚本。',
+      'frontend/ruoyi-vue 仅作旧视觉兼容保留，不再接收常规功能与界面更新。'
     ]
   },
   {
-    version: 'foundation',
-    date: '2026-07-25',
-    title: '授权平台工程底座',
-    status: '已替代',
+    version: 'v1.1.2',
+    date: '2026-06-14',
+    title: '系统配置与工程底座',
+    status: '历史版本',
     current: false,
-    summary: '在 ruoyi-go-by 与 RuoYi-Vue3 TypeScript 基础上建立 APIAuth 独立商业授权领域。',
+    summary: '补齐站点、支付和邮箱配置，并整理后端运行、构建与部署基础。',
     items: [
-      '管理 JWT/RBAC 与客户端许可证身份域保持隔离。',
-      'MySQL 版本化 migration 是数据库结构唯一权威，生产禁用自动迁移。',
-      '应用、套餐、许可证与签名租约的关键写入保持事务、幂等与审计一致。'
+      '系统配置集中管理站点信息、支付参数和邮箱参数。',
+      '后端基于 Go、Gin、GORM、MySQL、Redis 与 JWT。',
+      '管理端继续兼容动态菜单、RBAC、文件上传和代码生成。'
     ]
   }
 ]
 
-function goAuthorization(): void {
-  router.push('/auth/catalog')
+function openProject(): void {
+  window.open(projectUrl, '_blank', 'noopener,noreferrer')
 }
 </script>
 

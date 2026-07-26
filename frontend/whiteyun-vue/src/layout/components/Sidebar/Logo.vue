@@ -2,10 +2,10 @@
   <div class="sidebar-logo-container" :class="{ 'collapse': collapse }">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <span class="sidebar-monogram" aria-label="APIAuth">A</span>
+        <span class="sidebar-monogram" :aria-label="appTitle">{{ monogram }}</span>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <span class="sidebar-wordmark">APIAuth</span>
+        <span class="sidebar-wordmark">{{ appTitle }}</span>
         <span class="sidebar-console">控制台</span>
       </router-link>
     </transition>
@@ -13,6 +13,9 @@
 </template>
 
 <script setup lang="ts">
+const appTitle = import.meta.env.VITE_APP_TITLE || 'Whiteyun Vue'
+const monogram = appTitle.trim().charAt(0).toUpperCase() || 'W'
+
 defineProps({
   collapse: {
     type: Boolean,
@@ -62,10 +65,14 @@ defineProps({
     }
 
     .sidebar-wordmark {
+      min-width: 0;
+      overflow: hidden;
       color: var(--sidebar-logo-text);
       font-size: 18px;
       font-weight: 650;
       letter-spacing: -0.04em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .sidebar-console {
