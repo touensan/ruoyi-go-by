@@ -224,6 +224,44 @@ func (s *SystemSettingService) VerifyPaymentCallback(values url.Values) error {
 	return nil
 }
 
+func (s *SystemSettingService) CreatePointPayment(
+	setting dto.PaymentSetting,
+	outTradeNo string,
+	points uint64,
+	payType string,
+	clientIP string,
+	notifyURL string,
+	returnURL string,
+) (string, string, error) {
+	setting = normalizePaymentSetting(setting)
+	if !setting.Enabled || strings.TrimSpace(outTradeNo) == "" || points == 0 {
+		return "", "", errors.New("支付服务未启用")
+	}
+	context := epayTestContext{
+		OutTradeNo: outTradeNo,
+		Amount:     fmt.Sprintf("%d.00", points),
+		PayType:    payType,
+		Device:     "pc",
+		Method:     "web",
+		NotifyUrl:  notifyURL,
+		ReturnUrl:  returnURL,
+		OrderName:  fmt.Sprintf("平台积分充值 %d 积分", points),
+		ClientIP:   clientIP,
+		Param:      "point-recharge",
+	}
+	var step dto.SystemConfigTestStep
+	var externalOrderID, payInfo string
+	if setting.EpayVersion == "v2" {
+		step, externalOrderID, payInfo = s.epayV2Create(setting, context)
+	} else {
+		step, externalOrderID, payInfo = s.epayV1Create(setting, context)
+	}
+	if step.Status != "success" || strings.TrimSpace(payInfo) == "" {
+		return "", "", errors.New("创建积分充值订单失败")
+	}
+	return payInfo, externalOrderID, nil
+}
+
 func (s *SystemSettingService) ensureDefaultSetting(key, group string, value interface{}, remark, userName string) error {
 	var count int64
 	if err := dal.Gorm.Model(&model.SysSystemSetting{}).Where("setting_key = ?", key).Count(&count).Error; err != nil {
@@ -417,6 +455,7 @@ type epayTestContext struct {
 	ReturnUrl  string
 	OrderName  string
 	ClientIP   string
+	Param      string
 }
 
 type epayHTTPResponse struct {
@@ -485,7 +524,7 @@ func (s *SystemSettingService) epayV1Create(setting dto.PaymentSetting, ctx epay
 		"money":        ctx.Amount,
 		"clientip":     firstNonEmpty(ctx.ClientIP, "127.0.0.1"),
 		"device":       ctx.Device,
-		"param":        "system-config-test",
+		"param":        firstNonEmpty(ctx.Param, "system-config-test"),
 	}
 	params["sign"] = signMD5(params, setting.MerchantKey)
 	params["sign_type"] = "MD5"
@@ -557,7 +596,7 @@ func (s *SystemSettingService) epayV2Create(setting dto.PaymentSetting, ctx epay
 		"name":         ctx.OrderName,
 		"money":        ctx.Amount,
 		"clientip":     firstNonEmpty(ctx.ClientIP, "127.0.0.1"),
-		"param":        "system-config-test",
+		"param":        firstNonEmpty(ctx.Param, "system-config-test"),
 		"timestamp":    strconv.FormatInt(time.Now().Unix(), 10),
 	}
 	step := s.requestEpayV2(setting, "创建测试订单", epayEndpoint(setting.GatewayUrl, "/api/pay/create"), params, "0")

@@ -36,6 +36,29 @@ func RegisterAdminGroupApi(api *gin.RouterGroup) {
 	api.GET("/common/download", (&controller.CommonController{}).Download)                  // 通用下载
 	api.GET("/common/download/resource", (&controller.CommonController{}).DownloadResource) // 通用资源下载
 
+	platform := &controller.PlatformController{}
+	api.GET("/account/v1/overview", platform.Overview)
+	api.GET("/account/v1/ledger", platform.Ledger)
+	api.GET("/account/v1/recharges", platform.Recharges)
+	api.POST("/account/v1/recharges", platform.CreateRecharge)
+	api.GET("/account/v1/exchange", platform.Center)
+	api.POST("/account/v1/exchange/claims", platform.SubmitClaim)
+	api.POST("/account/v1/exchange/redeem", platform.Redeem)
+
+	platformAdmin := &controller.PlatformAdminController{}
+	api.GET("/admin/v1/platform/accounts", middleware.HasPerm("platform:points:list"), platformAdmin.Accounts)
+	api.POST("/admin/v1/platform/accounts/adjust", middleware.HasPerm("platform:points:adjust"), middleware.OperLogMiddleware("调整平台积分", constant.REQUEST_BUSINESS_TYPE_UPDATE), platformAdmin.Adjust)
+	api.GET("/admin/v1/platform/exchange/settings", middleware.HasPerm("platform:exchange:list"), platformAdmin.Settings)
+	api.PUT("/admin/v1/platform/exchange/settings", middleware.HasPerm("platform:exchange:edit"), middleware.OperLogMiddleware("更新兑换中心设置", constant.REQUEST_BUSINESS_TYPE_UPDATE), platformAdmin.SaveSettings)
+	api.POST("/admin/v1/platform/exchange/rainyun/test", middleware.HasPerm("platform:exchange:edit"), platformAdmin.TestRainyun)
+	api.GET("/admin/v1/platform/exchange/tasks", middleware.HasPerm("platform:exchange:list"), platformAdmin.Tasks)
+	api.POST("/admin/v1/platform/exchange/tasks", middleware.HasPerm("platform:exchange:edit"), platformAdmin.CreateTask)
+	api.PUT("/admin/v1/platform/exchange/tasks/:publicId", middleware.HasPerm("platform:exchange:edit"), platformAdmin.UpdateTask)
+	api.GET("/admin/v1/platform/exchange/claims", middleware.HasPerm("platform:exchange:list"), platformAdmin.Claims)
+	api.POST("/admin/v1/platform/exchange/claims/:publicId/review", middleware.HasPerm("platform:exchange:edit"), platformAdmin.ReviewClaim)
+	api.GET("/admin/v1/platform/exchange/codes", middleware.HasPerm("platform:exchange:list"), platformAdmin.Codes)
+	api.POST("/admin/v1/platform/exchange/codes", middleware.HasPerm("platform:exchange:edit"), platformAdmin.GenerateCodes)
+
 	api.GET("/system/user/profile", (&systemcontroller.UserController{}).GetProfile)                      // 个人信息
 	api.PUT("/system/user/profile", (&systemcontroller.UserController{}).UpdateProfile)                   // 修改用户
 	api.PUT("/system/user/profile/updatePwd", (&systemcontroller.UserController{}).UserProfileUpdatePwd)  // 重置密码
