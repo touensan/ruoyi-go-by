@@ -14,9 +14,9 @@
 
 # Dependencies and generated frontend output
 vendor/
-frontend/RuoYi-Vue3-ts/node_modules/
-frontend/RuoYi-Vue3-ts/dist/
-frontend/RuoYi-Vue3-ts/build/
+frontend/*/node_modules/
+frontend/*/dist/
+frontend/*/build/
 
 # Runtime data and logs
 runtime/
