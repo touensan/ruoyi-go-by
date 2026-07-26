@@ -2,7 +2,7 @@
 # Never commit application.yaml or production credentials.
 ruoyi:
   name: RuoYi-Go BY
-  version: 1.1.2
+  version: 1.2.0
   copyright: 2026
   domain: localhost:6555
   ssl: false

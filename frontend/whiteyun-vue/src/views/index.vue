@@ -133,10 +133,10 @@ const changelog = [
   {
     version: 'v1.1.2',
     date: '2026-06-14',
-    title: '系统配置与工程底座',
-    status: '历史版本',
+    title: 'RuoYi Vue 旧版前端基线',
+    status: '冻结兼容',
     current: false,
-    summary: '补齐站点、支付和邮箱配置，并整理后端运行、构建与部署基础。',
+    summary: '旧若依视觉前端的最后一个常规版本，补齐系统配置并整理工程运行基础。',
     items: [
       '系统配置集中管理站点信息、支付参数和邮箱参数。',
       '后端基于 Go、Gin、GORM、MySQL、Redis 与 JWT。',
