@@ -103,6 +103,10 @@ func (*SystemSettingController) PaymentNotify(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "fail")
 		return
 	}
+	if err := service.NewPlatformService().ApplyPaymentCallback(ctx.Request.Context(), ctx.Request.Form); err != nil {
+		ctx.String(http.StatusOK, "fail")
+		return
+	}
 	ctx.String(http.StatusOK, "success")
 }
 
@@ -113,6 +117,14 @@ func (*SystemSettingController) PaymentReturn(ctx *gin.Context) {
 	}
 	if err := (&service.SystemSettingService{}).VerifyPaymentCallback(ctx.Request.Form); err != nil {
 		ctx.String(http.StatusOK, "支付返回验签失败")
+		return
+	}
+	if err := service.NewPlatformService().ApplyPaymentCallback(ctx.Request.Context(), ctx.Request.Form); err != nil {
+		ctx.String(http.StatusOK, "积分充值入账失败")
+		return
+	}
+	if strings.HasPrefix(ctx.Request.Form.Get("out_trade_no"), "PT_") {
+		ctx.Redirect(http.StatusFound, "/admin/account/points?payment=success")
 		return
 	}
 	ctx.String(http.StatusOK, "支付返回验签成功")

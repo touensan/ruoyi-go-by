@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the v1.3.0 shared user workspace invariants without a live database."""
+"""Verify the v1.3+ shared user workspace invariants without a live database."""
 
 from pathlib import Path
 import re
@@ -70,10 +70,14 @@ require(
     "title: '工作台'" in router,
     "Whiteyun Vue 的共享首页未命名为“工作台”",
 )
+frontend_version = re.search(r'"version": "([0-9]+)\.([0-9]+)\.([0-9]+)"', package_json)
+backend_version = re.search(r"version: ([0-9]+)\.([0-9]+)\.([0-9]+)", application_example)
 require(
-    '"version": "1.3.0"' in package_json
-    and "version: 1.3.0" in application_example,
-    "v1.3.0 版本号未在前后端示例配置中同步",
+    frontend_version is not None
+    and backend_version is not None
+    and frontend_version.groups() == backend_version.groups()
+    and tuple(map(int, frontend_version.groups())) >= (1, 3, 0),
+    "v1.3+ 版本号未在前后端示例配置中同步",
 )
 
 print("user workspace architecture verification passed")

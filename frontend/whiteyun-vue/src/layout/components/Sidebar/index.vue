@@ -13,12 +13,20 @@
         mode="vertical"
         :class="sideTheme"
       >
-        <sidebar-item
-          v-for="(route, index) in sidebarRouters"
-          :key="route.path + index"
-          :item="route"
-          :base-path="route.path"
-        />
+        <template v-for="(menuRoute, index) in sidebarRouters" :key="menuRoute.path + index">
+          <template v-if="isAccountSection(menuRoute)">
+            <li class="account-section-divider" :class="{ collapsed: isCollapse }">
+              <span v-if="!isCollapse">我的服务</span>
+            </li>
+            <sidebar-item
+              v-for="child in visibleAccountChildren(menuRoute)"
+              :key="child.path"
+              :item="accountMenuItem(child)"
+              :base-path="accountMenuPath(menuRoute.path, child.path)"
+            />
+          </template>
+          <sidebar-item v-else :item="menuRoute" :base-path="menuRoute.path" />
+        </template>
       </el-menu>
     </el-scrollbar>
   </div>
@@ -41,6 +49,14 @@ const showLogo = computed(() => settingsStore.sidebarLogo)
 const sideTheme = computed(() => settingsStore.sideTheme)
 const theme = computed(() => settingsStore.theme)
 const isCollapse = computed(() => !appStore.sidebar.opened)
+const isAccountSection = (menuRoute: any) => String(menuRoute.path || '').replace(/^\/|\/$/g, '') === 'account'
+const visibleAccountChildren = (menuRoute: any) => (menuRoute.children || []).filter((child: any) => !child.hidden)
+const accountMenuPath = (parentPath: string, childPath: string) => {
+  const parent = String(parentPath || '').replace(/\/$/g, '')
+  const child = String(childPath || '').replace(/^\/+/g, '')
+  return `${parent}/${child}`.replace(/\/+/g, '/')
+}
+const accountMenuItem = (child: any) => ({ ...child, path: '', children: undefined })
 
 // 获取菜单背景色
 const getMenuBackground = computed(() => {
@@ -91,6 +107,30 @@ const activeMenu = computed(() => {
 
     .el-sub-menu__title {
       color: v-bind(getMenuTextColor);
+    }
+  }
+
+  .account-section-divider {
+    position: relative;
+    height: 40px;
+    margin: 14px 18px 2px;
+    border-top: 1px solid var(--admin-line);
+    list-style: none;
+
+    span {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      color: var(--sidebar-text);
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: .08em;
+      opacity: .7;
+    }
+
+    &.collapsed {
+      height: 18px;
+      margin: 12px 12px 0;
     }
   }
 }

@@ -518,3 +518,7 @@ CREATE TABLE `sys_logininfor` (
 COMMENT='系统访问记录'
 COLLATE='utf8mb4_unicode_ci'
 ENGINE=InnoDB;
+
+-- v1.4.0 基础能力在独立、可重复执行的升级脚本中维护。
+-- 使用 MySQL 客户端导入本文件后继续执行：
+-- SOURCE sql/upgrade/v1.4.0-points-exchange.sql;
