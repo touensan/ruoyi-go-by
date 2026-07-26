@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"ruoyi-go/app/dto"
 	"ruoyi-go/app/security"
 	"ruoyi-go/app/service"
@@ -22,6 +23,14 @@ import (
 )
 
 type AuthController struct{}
+
+func defaultRegistrationRoleID(role dto.RoleDetailResponse) (int, error) {
+	if role.RoleId <= 0 || role.Status != constant.NORMAL_STATUS {
+		return 0, errors.New("默认用户角色未配置或已停用，请联系管理员")
+	}
+
+	return role.RoleId, nil
+}
 
 // 获取验证码
 func (*AuthController) CaptchaImage(ctx *gin.Context) {
@@ -69,6 +78,13 @@ func (*AuthController) Register(ctx *gin.Context) {
 		return
 	}
 
+	defaultRole := (&service.RoleService{}).GetRoleByRoleKey(constant.DEFAULT_USER_ROLE_KEY)
+	defaultRoleID, err := defaultRegistrationRoleID(defaultRole)
+	if err != nil {
+		response.NewError().SetMsg(err.Error()).Json(ctx)
+		return
+	}
+
 	if err := (&service.UserService{}).CreateUser(dto.SaveUser{
 		UserName: param.Username,
 		NickName: param.Username,
@@ -76,7 +92,7 @@ func (*AuthController) Register(ctx *gin.Context) {
 		Status:   "0",
 		Remark:   "注册用户",
 		CreateBy: "注册用户",
-	}, nil, nil); err != nil {
+	}, []int{defaultRoleID}, nil); err != nil {
 		response.NewError().SetMsg(err.Error()).Json(ctx)
 		return
 	}

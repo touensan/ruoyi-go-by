@@ -3,6 +3,12 @@ package constant
 // 平台内系统用户的唯一标志
 const SYS_USER = "SYS_USER"
 
+// 自助注册用户默认绑定的基础角色。
+//
+// 普通用户只通过该角色获得用户工作台菜单；管理员在此基础上叠加管理角色，
+// 超级管理员则继续由现有超级权限规则获得全部菜单。
+const DEFAULT_USER_ROLE_KEY = "common"
+
 // 正常状态
 const NORMAL_STATUS = "0"
 

@@ -1,152 +1,128 @@
 <template>
   <div class="app-container home">
-    <section class="intro-panel">
-      <div class="intro-copy">
-        <p class="product-code">Whiteyun Vue · {{ productVersion }}</p>
-        <h1>白云 R1-Go</h1>
+    <section class="welcome-panel">
+      <div class="welcome-copy">
+        <p class="product-code">RuoYi-Go BY · v1.3.0</p>
+        <h1>你好，{{ displayName }}</h1>
         <p class="product-summary">
-          以 Go 生态和 RuoYi 权限模型为基础，配套持续维护的白云风格 Vue 3 管理前端。
+          这里是你的工作台。账户资料与业务服务始终属于用户空间，管理员会在同一套界面中获得额外的管理入口。
         </p>
-        <div class="intro-actions">
-          <el-button class="intro-primary-action" type="primary" @click="openProject">
-            <span>访问项目仓库</span>
-            <el-icon><ArrowRight /></el-icon>
-          </el-button>
-          <el-tag class="intro-version-tag" effect="plain">当前版本 {{ productVersion }}</el-tag>
+        <div class="welcome-actions">
+          <el-button type="primary" @click="openProfile('userinfo')">完善个人资料</el-button>
+          <el-button @click="openProfile('resetPwd')">账户安全</el-button>
         </div>
       </div>
 
-      <div class="runtime-box">
-        <div>
-          <span>后端基线</span>
-          <strong>Go + Gin</strong>
-        </div>
-        <div>
-          <span>数据库基线</span>
-          <strong>MySQL 5.7+</strong>
-        </div>
-        <div>
-          <span>演示站点</span>
-          <el-link :href="demoOrigin" target="_blank" type="primary">r1-go.whiteyun.com</el-link>
-        </div>
+      <div class="identity-card">
+        <span>当前身份</span>
+        <strong>{{ identityLabel }}</strong>
+        <el-tag :type="isAdministrator ? 'primary' : 'info'" effect="light">
+          {{ isAdministrator ? '用户空间 + 管理权限' : '用户空间' }}
+        </el-tag>
       </div>
     </section>
 
-    <section class="stack-section">
+    <section class="workspace-section">
       <div class="section-heading">
-        <h2>技术栈</h2>
-        <p>保留成熟的用户、角色、菜单、配置、日志与代码生成能力，并升级主题和响应式体验。</p>
+        <h2>我的账户</h2>
+        <p>所有账号共享的基础入口，普通用户不会看到系统管理功能。</p>
       </div>
 
-      <el-row :gutter="16">
-        <el-col v-for="group in stackGroups" :key="group.title" :xs="24" :md="8">
-          <el-card shadow="never" class="stack-card">
-            <template #header>
-              <span>{{ group.title }}</span>
-            </template>
-            <div class="stack-list">
-              <el-tag v-for="item in group.items" :key="item" effect="plain">{{ item }}</el-tag>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
+      <div class="action-grid">
+        <button class="action-card" type="button" @click="openProfile('userinfo')">
+          <span class="action-icon"><svg-icon icon-class="user" /></span>
+          <span class="action-copy">
+            <strong>个人资料</strong>
+            <small>维护昵称、邮箱、手机号和头像</small>
+          </span>
+          <span class="action-arrow">→</span>
+        </button>
+
+        <button class="action-card" type="button" @click="openProfile('resetPwd')">
+          <span class="action-icon"><svg-icon icon-class="password" /></span>
+          <span class="action-copy">
+            <strong>账户安全</strong>
+            <small>更新登录密码并检查账户信息</small>
+          </span>
+          <span class="action-arrow">→</span>
+        </button>
+      </div>
     </section>
 
-    <section class="changelog-section">
+    <section v-if="isAdministrator" class="workspace-section">
       <div class="section-heading">
-        <h2>更新日志</h2>
-        <p>记录 RuoYi-Go BY 与 Whiteyun Vue 的真实版本演进。</p>
+        <h2>管理入口</h2>
+        <p>管理能力叠加在用户工作台之上，不建立另一套割裂的后台。</p>
       </div>
 
-      <el-scrollbar class="changelog-scroll" max-height="260px">
-        <el-collapse v-model="activeLog" accordion class="changelog-collapse">
-          <el-collapse-item v-for="log in changelog" :key="log.version" :name="log.version">
-            <template #title>
-              <div class="changelog-title-row">
-                <span class="log-version">{{ log.version }}</span>
-                <span class="log-date">{{ log.date }}</span>
-                <span class="log-title">{{ log.title }}</span>
-                <span class="log-status" :class="{ 'is-current': log.current }">{{ log.status }}</span>
-              </div>
-            </template>
-            <div class="changelog-detail">
-              <p>{{ log.summary }}</p>
-              <ul>
-                <li v-for="item in log.items" :key="item">{{ item }}</li>
-              </ul>
-            </div>
-          </el-collapse-item>
-        </el-collapse>
-      </el-scrollbar>
+      <div class="action-grid admin-grid">
+        <button
+          v-for="entry in adminEntries"
+          :key="entry.path"
+          class="action-card"
+          type="button"
+          @click="router.push(entry.path)"
+        >
+          <span class="action-icon"><svg-icon :icon-class="entry.icon" /></span>
+          <span class="action-copy">
+            <strong>{{ entry.title }}</strong>
+            <small>{{ entry.description }}</small>
+          </span>
+          <span class="action-arrow">→</span>
+        </button>
+      </div>
     </section>
 
-    <section class="credits">
-      <span>开源底座致谢：</span>
-      <el-link href="https://github.com/touensan/ruoyi-go-by" target="_blank" type="primary">
-        touensan/ruoyi-go-by
-      </el-link>
-      <span>、</span>
-      <el-link href="https://gitcode.com/yangzongzhuan/RuoYi-Vue3/tree/typescript" target="_blank" type="primary">
-        RuoYi-Vue3 TypeScript
-      </el-link>
+    <section class="architecture-note">
+      <div>
+        <strong>统一身份架构</strong>
+        <p>后续项目把面向客户的功能加入“我的账户”，把运营能力加入管理菜单，即可沿用同一套权限模型。</p>
+      </div>
+      <el-tag effect="plain">v1.3.0</el-tag>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-const productVersion = '1.2.0'
-const projectUrl = 'https://github.com/touensan/ruoyi-go-by'
-const demoOrigin = 'https://r1-go.whiteyun.com/'
-const activeLog = ref<string>('')
+import useUserStore from '@/store/modules/user'
 
-const stackGroups = [
+const router = useRouter()
+const userStore = useUserStore()
+
+const displayName = computed(() => userStore.nickName || userStore.name || '用户')
+const isAdministrator = computed(() =>
+  userStore.permissions.includes('*:*:*') || userStore.roles.includes('admin')
+)
+const identityLabel = computed(() => isAdministrator.value ? '管理员' : '普通用户')
+
+const adminEntries = [
   {
-    title: '后端技术',
-    items: ['Go 1.25+', 'Gin 1.12', 'GORM 1.31', 'MySQL 5.7+', '兼容 MySQL 8', 'Redis 5/6/7', 'JWT v5']
+    title: '用户管理',
+    description: '管理用户、状态与角色分配',
+    icon: 'user',
+    path: '/system/user'
   },
   {
-    title: '前端技术',
-    items: ['Vue 3.5', 'Vite 6', 'TypeScript', 'Element Plus', 'Pinia', 'Vue Router 4', 'Axios']
+    title: '角色与权限',
+    description: '配置管理角色与菜单权限',
+    icon: 'peoples',
+    path: '/system/role'
   },
   {
-    title: '部署运行',
-    items: ['Nginx 反向代理', '宝塔面板', '单二进制服务', '静态资源发布', '本地动态配置', '备份与回档']
+    title: '系统配置',
+    description: '维护站点、支付与邮件配置',
+    icon: 'system',
+    path: '/system/settings'
   }
 ]
 
-const changelog = [
-  {
-    version: 'v1.2.0',
-    date: '2026-07-26',
-    title: 'Whiteyun Vue 成为默认前端',
-    status: '当前版本',
-    current: true,
-    summary: '新增独立维护的 Whiteyun Vue 前端，同时保留冻结的 RuoYi Vue 兼容版本。',
-    items: [
-      '重做管理端日间与夜间配色，统一侧边栏、顶部导航、标签页、表单和弹层。',
-      '三种导航布局均可随主题正确切换，桌面、平板和手机端保持可用。',
-      '登录页、后台首页、系统配置与代码生成页面共享同一套视觉变量。',
-      '默认构建入口切换到 frontend/whiteyun-vue，历史路径继续兼容旧脚本。',
-      'frontend/ruoyi-vue 仅作旧视觉兼容保留，不再接收常规功能与界面更新。'
-    ]
-  },
-  {
-    version: 'v1.1.2',
-    date: '2026-06-14',
-    title: 'RuoYi Vue 旧版前端基线',
-    status: '冻结兼容',
-    current: false,
-    summary: '旧若依视觉前端的最后一个常规版本，补齐系统配置并整理工程运行基础。',
-    items: [
-      '系统配置集中管理站点信息、支付参数和邮箱参数。',
-      '后端基于 Go、Gin、GORM、MySQL、Redis 与 JWT。',
-      '管理端继续兼容动态菜单、RBAC、文件上传和代码生成。'
-    ]
+function openProfile(activeTab: 'userinfo' | 'resetPwd'): void {
+  if (activeTab === 'userinfo') {
+    router.push({ name: 'UserProfile' })
+    return
   }
-]
 
-function openProject(): void {
-  window.open(projectUrl, '_blank', 'noopener,noreferrer')
+  router.push({ name: 'Profile', params: { activeTab } })
 }
 </script>
 
@@ -155,11 +131,11 @@ function openProject(): void {
   color: var(--el-text-color-primary);
 }
 
-.intro-panel {
+.welcome-panel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-columns: minmax(0, 1fr) 280px;
   gap: 24px;
-  padding: 28px 32px;
+  padding: 30px 32px;
   border: 1px solid var(--el-border-color-light);
   border-radius: 16px;
   background:
@@ -171,14 +147,14 @@ function openProject(): void {
   margin: 0 0 8px;
   color: var(--el-color-primary);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 650;
 }
 
-.intro-copy h1 {
+.welcome-copy h1 {
   margin: 0;
   font-size: clamp(32px, 3.5vw, 48px);
   line-height: 1.25;
-  font-weight: 650;
+  font-weight: 680;
 }
 
 .product-summary {
@@ -189,75 +165,37 @@ function openProject(): void {
   line-height: 1.8;
 }
 
-.intro-actions {
+.welcome-actions {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   gap: 12px;
   margin-top: 22px;
 }
 
-.intro-primary-action {
-  min-height: 40px;
-  padding: 0 17px;
-  border-radius: 10px;
-  font-weight: 600;
-  letter-spacing: .01em;
-
-  :deep(.el-icon) {
-    margin-left: 2px;
-    font-size: 14px;
-  }
-}
-
-.intro-version-tag {
-  --el-tag-bg-color: var(--admin-surface-soft);
-  --el-tag-border-color: var(--admin-line-strong);
-  --el-tag-text-color: var(--admin-muted);
-  height: 32px;
-  padding: 0 11px;
-  border-color: var(--admin-line-strong) !important;
-  border-radius: 8px;
-  color: var(--admin-muted) !important;
-  background: var(--admin-surface-soft) !important;
-}
-
-.runtime-box {
-  display: grid;
-  gap: 14px;
-  padding: 18px;
+.identity-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
   border: 1px solid var(--admin-line);
   border-radius: 13px;
   background: var(--admin-surface-soft);
 }
 
-.runtime-box div {
-  min-width: 0;
-}
-
-.runtime-box span {
-  display: block;
-  margin-bottom: 6px;
+.identity-card > span {
   color: var(--el-text-color-secondary);
   font-size: 13px;
 }
 
-.runtime-box strong {
-  display: block;
-  font-size: 17px;
-  font-weight: 650;
+.identity-card strong {
+  font-size: 24px;
+  font-weight: 680;
 }
 
-.runtime-box :deep(.el-link__inner) {
-  word-break: break-all;
-}
-
-.stack-section {
-  margin-top: 20px;
-}
-
-.changelog-section {
-  margin-top: 20px;
+.workspace-section {
+  margin-top: 22px;
 }
 
 .section-heading {
@@ -267,7 +205,7 @@ function openProject(): void {
 .section-heading h2 {
   margin: 0;
   font-size: 22px;
-  font-weight: 650;
+  font-weight: 680;
 }
 
 .section-heading p {
@@ -276,180 +214,174 @@ function openProject(): void {
   line-height: 1.7;
 }
 
-.stack-card {
-  height: 100%;
-  border-radius: 13px;
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
-.stack-card :deep(.el-card__header) {
-  font-weight: 650;
+.admin-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.stack-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.changelog-scroll {
+.action-card {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 18px;
   border: 1px solid var(--el-border-color-light);
   border-radius: 13px;
+  color: inherit;
+  text-align: left;
   background: var(--el-bg-color);
+  cursor: pointer;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
 
-.changelog-collapse {
-  border: 0;
+.action-card:hover {
+  border-color: var(--el-color-primary-light-5);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, .08);
+  transform: translateY(-2px);
 }
 
-.changelog-collapse :deep(.el-collapse-item__wrap) {
-  border-bottom: 0;
+.action-card:focus-visible {
+  outline: 3px solid var(--el-color-primary-light-7);
+  outline-offset: 2px;
 }
 
-.changelog-collapse :deep(.el-collapse-item__header) {
-  height: 42px;
-  padding: 0 12px 0 16px;
-  border-bottom-color: var(--el-border-color-lighter);
-  color: var(--el-text-color-primary);
-  line-height: 42px;
-  transition: background-color 0.2s ease;
-}
-
-.changelog-collapse :deep(.el-collapse-item__header:hover) {
-  background: var(--el-fill-color-lighter);
-}
-
-.changelog-collapse :deep(.el-collapse-item__header.is-active) {
-  background: var(--el-color-primary-light-9);
-  border-bottom-color: var(--el-color-primary-light-7);
-}
-
-.changelog-collapse :deep(.el-collapse-item__arrow) {
-  margin-left: 10px;
-  color: var(--el-text-color-secondary);
-}
-
-.changelog-collapse :deep(.el-collapse-item__content) {
-  padding: 10px 16px 14px 16px;
-}
-
-.changelog-title-row {
+.action-icon {
   display: grid;
-  grid-template-columns: 76px 104px minmax(0, 1fr) 72px;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 11px;
+  color: var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
+  font-size: 20px;
+}
+
+.action-copy {
   min-width: 0;
 }
 
-.log-version {
-  color: var(--el-text-color-primary);
+.action-copy strong,
+.action-copy small {
+  display: block;
+}
+
+.action-copy strong {
+  font-size: 16px;
   font-weight: 650;
 }
 
-.log-date {
-  color: var(--el-text-color-secondary);
-  font-size: 13px;
-}
-
-.log-title {
-  min-width: 0;
+.action-copy small {
+  margin-top: 6px;
   overflow: hidden;
-  color: var(--el-text-color-regular);
-  font-size: 14px;
-  font-weight: 500;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.log-status {
-  justify-self: end;
-  width: 64px;
-  height: 24px;
-  border: 1px solid var(--el-border-color);
-  border-radius: 7px;
-  color: var(--el-text-color-secondary);
-  background: var(--el-fill-color-lighter);
-  font-size: 12px;
-  line-height: 22px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.log-status.is-current {
-  border-color: var(--el-color-success-light-5);
-  color: var(--el-color-success);
-  background: var(--el-color-success-light-9);
-}
-
-.changelog-detail {
-  padding-left: 180px;
-}
-
-.changelog-detail p {
-  margin: 0 0 8px;
-  color: var(--el-text-color-secondary);
-  line-height: 1.6;
-}
-
-.changelog-detail ul {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(260px, 1fr));
-  gap: 6px 18px;
-  margin: 0;
-  padding-left: 18px;
-  color: var(--el-text-color-regular);
-  line-height: 1.6;
-}
-
-.credits {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-  margin-top: 20px;
   color: var(--el-text-color-secondary);
   font-size: 13px;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+}
+
+.action-arrow {
+  color: var(--el-text-color-secondary);
+  font-size: 18px;
+}
+
+.architecture-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 24px;
+  padding: 18px 20px;
+  border: 1px solid var(--admin-line);
+  border-radius: 13px;
+  background: var(--admin-surface-soft);
+}
+
+.architecture-note strong {
+  font-weight: 650;
+}
+
+.architecture-note p {
+  margin: 6px 0 0;
+  color: var(--el-text-color-secondary);
+  line-height: 1.6;
 }
 
 @media (max-width: 900px) {
-  .intro-panel {
+  .welcome-panel {
     grid-template-columns: 1fr;
-    padding: 22px;
   }
 
-  .changelog-title-row {
-    grid-template-columns: 72px 96px minmax(0, 1fr);
+  .identity-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
   }
 
-  .log-status {
-    display: none;
+  .identity-card strong {
+    grid-column: 1;
   }
 
-  .changelog-detail {
-    padding-left: 0;
+  .identity-card .el-tag {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
   }
 
-  .changelog-detail ul {
+  .admin-grid {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 520px) {
-  .intro-copy h1 {
-    font-size: 26px;
+@media (max-width: 640px) {
+  .home {
+    padding: 12px;
+  }
+
+  .welcome-panel {
+    gap: 18px;
+    padding: 22px 18px;
+    border-radius: 14px;
+  }
+
+  .welcome-copy h1 {
+    font-size: 30px;
   }
 
   .product-summary {
-    font-size: 15px;
+    font-size: 14px;
   }
 
-  .changelog-title-row {
-    grid-template-columns: 70px minmax(0, 1fr);
-    gap: 8px;
+  .welcome-actions {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
-  .log-date {
-    display: none;
+  .welcome-actions .el-button {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .action-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-card {
+    padding: 16px;
+  }
+
+  .architecture-note {
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action-card {
+    transition: none;
   }
 }
 </style>
