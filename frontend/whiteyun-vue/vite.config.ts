@@ -50,7 +50,7 @@ export default defineConfig(({ mode, command }) => {
         '/dev-api': {
           target: baseUrl,
           changeOrigin: true,
-          rewrite: (p) => p.replace(/^\/dev-api/, '')
+          rewrite: (p) => p.replace(/^\/dev-api/, '/api')
         },
          // springdoc proxy
          '^/v3/api-docs/(.*)': {
