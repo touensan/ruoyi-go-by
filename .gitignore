@@ -21,6 +21,7 @@ frontend/*/build/
 # Runtime data and logs
 runtime/
 web/upload/
+web/docs/
 *.log
 *.pid
 *.db

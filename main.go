@@ -71,10 +71,18 @@ func main() {
 	server.Any("/", func(ctx *gin.Context) {
 		ctx.Redirect(http.StatusFound, "/admin/")
 	})
+	server.GET("/docs", func(ctx *gin.Context) {
+		ctx.Redirect(http.StatusMovedPermanently, "/docs/")
+	})
+	server.Static("/docs", "web/docs")
 	server.Static("/admin", "web/admin")
 	server.NoRoute(func(ctx *gin.Context) {
 		if strings.HasPrefix(ctx.Request.URL.Path, "/admin") {
 			ctx.File("web/admin/index.html")
+			return
+		}
+		if strings.HasPrefix(ctx.Request.URL.Path, "/docs") {
+			ctx.File("web/docs/index.html")
 			return
 		}
 		ctx.JSON(http.StatusNotFound, gin.H{"code": 404, "msg": "not found"})

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f7f6" />
+    <link rel="icon" href="/docs/favicon.svg" type="image/svg+xml" />
+    <meta
+      name="description"
+      content="RuoYi-Go BY 开源后台管理系统使用指南：环境准备、前端构建、系统配置和生产部署。"
+    />
+    <title>RuoYi-Go BY 使用指南</title>
+    <script src="/docs/theme.js"></script>
+    <link rel="stylesheet" href="/docs/docs.css" />
+    <script src="/docs/docs.js" defer></script>
+  </head>
+  <body>
+    <header class="docs-header">
+      <a class="docs-brand" href="/docs/"><span>RuoYi-Go BY</span><b>使用指南</b></a>
+      <nav aria-label="文档顶部导航">
+        <a href="/docs/">文档首页</a>
+        <a href="/admin/">后台入口</a>
+        <a class="header-primary" href="https://github.com/touensan/ruoyi-go-by" target="_blank" rel="noreferrer">GitHub</a>
+      </nav>
+      <div class="theme-switch" role="group" aria-label="外观模式">
+        <button type="button" data-theme-option="light" aria-pressed="false">日间</button>
+        <button type="button" data-theme-option="dark" aria-pressed="false">夜间</button>
+      </div>
+      <button class="docs-menu" type="button" aria-label="打开文档导航" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    <div class="docs-layout">
+      <aside class="docs-sidebar">
+        <label class="search-box">
+          <span class="search-mark" aria-hidden="true">⌕</span>
+          <input type="search" placeholder="搜索使用指南" aria-label="搜索使用指南" />
+          <kbd>⌘ K</kbd>
+        </label>
+        <nav class="docs-nav" aria-label="文档目录">
+          <p>开始使用</p>
+          <a class="active" href="#overview">RuoYi-Go BY 能做什么</a>
+          <a href="#quickstart">四步启动</a>
+          <a href="#project-structure">项目结构</a>
+
+          <p>后台能力</p>
+          <a href="#admin-capabilities">系统管理</a>
+          <a href="#settings-and-tools">配置与工具</a>
+          <a href="#frontend">前端选择</a>
+
+          <p>部署与安全</p>
+          <a href="#deployment">构建与部署</a>
+          <a href="#security">安全规则</a>
+          <a href="#faq">常见问题</a>
+        </nav>
+        <div class="sidebar-foot">
+          <span>RUOYI-GO BY GUIDE</span>
+          <small>面向 Go 管理后台的开发者与运维人员</small>
+        </div>
+      </aside>
+
+      <main class="docs-main">
+        <article>
+          <section class="doc-section" id="overview" data-search="RuoYi Go BY 后台 管理系统 开源 项目">
+            <span class="eyebrow">项目使用指南</span>
+            <h1>一个可直接运行的 Go 管理后台</h1>
+            <p class="lead">
+              RuoYi-Go BY 以 Go、Gin、GORM 和 Vue 3 为基础，保留用户、角色、菜单、配置、日志与代码生成能力，并补充支付、邮箱和系统设置工作台。
+            </p>
+            <div class="role-grid">
+              <div>
+                <b>Go 服务端</b>
+                <p>单体 Go 服务负责鉴权、RBAC、系统管理、数据访问、文件上传和常用业务接口，默认使用 MySQL 与 Redis。</p>
+              </div>
+              <div>
+                <b>Whiteyun Vue 管理端</b>
+                <p>Vue 3、Vite、TypeScript 和 Element Plus 组成持续维护的默认前端，同时保留冻结的 RuoYi Vue 兼容版本。</p>
+              </div>
+            </div>
+            <div class="notice">
+              <b>先使用示例配置，再接入真实服务</b>
+              <p>仓库中的配置、账号、支付和邮件字段只用于本地开发。部署前请替换数据库、Redis、JWT 密钥和默认账号，并确认没有提交生产凭据。</p>
+            </div>
+            <a class="inline-button" href="#quickstart">开始准备运行环境</a>
+          </section>
+
+          <section class="doc-section" id="quickstart" data-search="启动 安装 Go MySQL Redis application 配置 数据库">
+            <span class="eyebrow">快速开始</span>
+            <h2>从源码到后台，只要四步</h2>
+            <ol class="steps">
+              <li><b>1</b><div><h3>准备 Go、MySQL 和 Redis</h3><p>使用 Go 1.25+，准备 MySQL 5.7.8+（兼容 MySQL 8）和 Redis。确保服务地址、端口和账号可用。</p></div></li>
+              <li><b>2</b><div><h3>复制并填写示例配置</h3><p>复制 <code>application-example.yaml</code> 为 <code>application.yaml</code>，只在本机或受控部署目录填写真实连接信息。</p></div></li>
+              <li><b>3</b><div><h3>初始化数据库并安装依赖</h3><p>导入 <code>ruoyi.sql</code>，再执行 <code>go mod tidy</code>。示例账号首次登录后必须立即修改密码。</p></div></li>
+              <li><b>4</b><div><h3>启动服务并打开管理端</h3><p>运行 Go 服务与前端开发服务器，或先构建管理端后由 Go 服务托管 <code>/admin/</code> 静态文件。</p></div></li>
+            </ol>
+            <div class="flow" aria-label="项目启动流程">
+              <div><b>PREPARE</b><span>准备数据库与缓存</span></div>
+              <i></i>
+              <div><b>CONFIGURE</b><span>填写本地运行配置</span></div>
+              <i></i>
+              <div><b>RUN</b><span>进入后台开始开发</span></div>
+            </div>
+            <h3 class="code-title">本地启动命令</h3>
+            <div class="code-block">
+              <button class="copy-code" type="button">复制</button>
+              <pre><code>cp application-example.yaml application.yaml
+go mod tidy
+go run main.go
+
+# 新终端：启动默认管理前端
+cd frontend/whiteyun-vue
+npm ci
+npm run dev</code></pre>
+            </div>
+          </section>
+
+          <section class="doc-section" id="project-structure" data-search="目录 结构 app frontend common framework docs">
+            <span class="eyebrow">工程结构</span>
+            <h2>按职责组织源码</h2>
+            <p>后端、默认前端、兼容前端和文档入口彼此独立，便于按需替换界面或部署静态资源。</p>
+            <div class="compat-table">
+              <div><b>目录</b><span>用途</span></div>
+              <div><b><code>app/</code></b><span>控制器、服务、模型、DTO、校验器和路由。</span></div>
+              <div><b><code>common/</code></b><span>验证码、上传、密码、Excel、UUID 等通用能力。</span></div>
+              <div><b><code>framework/</code></b><span>数据库、Redis、响应、日期时间等基础设施封装。</span></div>
+              <div><b><code>frontend/whiteyun-vue/</code></b><span>当前默认的 Whiteyun Vue 管理端。</span></div>
+              <div><b><code>frontend/ruoyi-vue/</code></b><span>冻结的 RuoYi Vue 旧视觉兼容版本。</span></div>
+              <div><b><code>frontend/docs/</code></b><span>本公共文档页的静态源码与构建资源。</span></div>
+            </div>
+          </section>
+
+          <section class="doc-section" id="admin-capabilities" data-search="系统管理 用户 角色 菜单 权限 日志 监控">
+            <span class="eyebrow">后台能力</span>
+            <h2>常用管理能力已经准备好</h2>
+            <ol class="steps">
+              <li><b>1</b><div><h3>用户与权限</h3><p>通过用户、角色、菜单和部门维护 RBAC 权限，动态路由会根据当前账号权限生成。</p></div></li>
+              <li><b>2</b><div><h3>系统运行</h3><p>提供登录日志、操作日志、在线用户、定时任务、缓存和服务监控等常用运维入口。</p></div></li>
+              <li><b>3</b><div><h3>扩展工作台</h3><p>系统设置集中管理站点、支付和邮箱；工具箱提供代码生成与接口文档兼容入口。</p></div></li>
+            </ol>
+            <div class="quick-grid">
+              <a href="/admin/"><b>进入管理后台</b><span>登录后从动态菜单查看当前账号可用的系统、监控和工具模块。</span></a>
+              <a href="https://github.com/touensan/ruoyi-go-by/releases" target="_blank" rel="noreferrer"><b>查看正式版本</b><span>从 GitHub Releases 下载源码压缩包和对应版本说明。</span></a>
+            </div>
+          </section>
+
+          <section class="doc-section" id="settings-and-tools" data-search="系统配置 支付 邮箱 SMTP 易支付 代码生成 Swagger">
+            <span class="eyebrow">配置与工具</span>
+            <h2>项目补充的差异功能</h2>
+            <div class="policy">
+              <div><b>站点配置</b><span>统一维护站点名称、Logo、SEO、版权、备案和客服信息。</span></div>
+              <div><b>支付配置</b><span>支持易支付 V1/V2、支付宝和微信参数，提供回调地址生成和测试入口。</span></div>
+              <div><b>邮箱配置</b><span>支持 SMTP、QQ 邮箱、Gmail 和自定义服务器，并提供发送测试。</span></div>
+              <div><b>代码生成</b><span>支持数据表筛选、导入、预览、同步、生成和下载入口。</span></div>
+              <div><b>接口入口</b><span><code>/swagger-ui/</code> 保留兼容占位页，实际接口以 Go 路由与项目文档为准。</span></div>
+            </div>
+            <div class="warning">支付商户号、密钥、SMTP 密码和 JWT 密钥均不会随公共源码提供。请把真实值放入部署环境的配置文件或密钥管理系统。</div>
+          </section>
+
+          <section class="doc-section" id="frontend" data-search="Whiteyun Vue RuoYi Vue 前端 Vite TypeScript Element Plus">
+            <span class="eyebrow">前端选择</span>
+            <h2>默认体验与旧版兼容并存</h2>
+            <p>新项目建议使用 Whiteyun Vue；需要继续兼容旧若依视觉或已有二次开发时，再选择冻结的 RuoYi Vue。</p>
+            <div class="state-docs">
+              <div class="valid"><b>WHITEYUN VUE</b><p>当前默认前端。持续维护白云风格、主题切换、响应式布局和授权工作台。</p></div>
+              <div class="unknown"><b>RUOYI VUE</b><p>旧视觉兼容版本。保留用于迁移和已有定制，不再接收常规界面更新。</p></div>
+              <div class="invalid"><b>BUILD OUTPUT</b><p>生产构建统一输出到 <code>web/admin</code>，由 Go 服务以 <code>/admin/</code> 对外提供。</p></div>
+            </div>
+            <a class="inline-button" href="https://github.com/touensan/ruoyi-go-by/tree/main/frontend" target="_blank" rel="noreferrer">查看前端源码</a>
+          </section>
+
+          <section class="doc-section" id="deployment" data-search="构建 部署 Nginx systemd web admin docs 生产">
+            <span class="eyebrow">构建与部署</span>
+            <h2>把管理端和文档一起交给 Go 服务</h2>
+            <p>生产构建会生成管理端静态资源，并同步复制本公共文档页。Go 服务负责提供 <code>/admin/</code> 与 <code>/docs/</code> 两个入口。</p>
+            <div class="code-block">
+              <button class="copy-code" type="button">复制</button>
+              <pre><code>go build -o ruoyi-go-by main.go
+frontend/build-admin.sh
+
+# 运行后访问
+https://your-domain.example/docs/
+https://your-domain.example/admin/</code></pre>
+            </div>
+            <div class="notice">
+              <b>反向代理建议</b>
+              <p>让 Nginx 或宝塔站点负责 HTTPS，Go 服务只监听受控端口；正式环境同时配置 systemd 自动拉起、日志轮转、数据库备份和回滚目录。</p>
+            </div>
+          </section>
+
+          <section class="doc-section" id="security" data-search="安全 密码 JWT 配置 生产 凭据 脱敏">
+            <span class="eyebrow">安全与上线前检查</span>
+            <h2>发布前先完成这四项</h2>
+            <div class="checklist">
+              <label><input type="checkbox" />替换数据库、Redis、JWT 和默认管理员配置，不使用示例口令运行生产环境。</label>
+              <label><input type="checkbox" />支付商户信息、SMTP 凭据和第三方密钥只放在受限配置中，不提交到 Git。</label>
+              <label><input type="checkbox" />首次登录后立即修改默认账号密码，并按最小权限分配角色和菜单。</label>
+              <label><input type="checkbox" />发布前检查截图、日志、SQL 和 README，确认没有真实账号、密钥或业务数据。</label>
+            </div>
+            <a class="inline-button" href="https://github.com/touensan/ruoyi-go-by/blob/main/SECURITY.md" target="_blank" rel="noreferrer">查看安全说明</a>
+          </section>
+
+          <section class="doc-section" id="faq" data-search="常见问题 404 admin docs 配置 数据库 前端">
+            <span class="eyebrow">常见问题</span>
+            <h2>遇到问题时，先检查这里</h2>
+            <div class="policy">
+              <div><b>为什么访问根路径进入后台？</b><span>当前 Go 服务把根路径兼容重定向到 <code>/admin/</code>；公共使用指南固定在 <code>/docs/</code>。</span></div>
+              <div><b>为什么刷新后台页面不会 404？</b><span>生产服务会为 <code>/admin/*</code> 回退到管理端 index.html，再由前端路由渲染当前页面。</span></div>
+              <div><b>为什么文档页没有登录？</b><span>这是公共使用指南，只介绍项目能力和部署方式；需要操作后台时再进入管理端登录。</span></div>
+              <div><b>可以继续使用旧版前端吗？</b><span>可以。构建前设置 <code>APIAUTH_ADMIN_FRONTEND=ruoyi-vue</code>，但新功能和视觉更新优先维护 Whiteyun Vue。</span></div>
+            </div>
+            <a class="inline-button" href="https://github.com/touensan/ruoyi-go-by/issues" target="_blank" rel="noreferrer">在 GitHub 提交问题</a>
+          </section>
+        </article>
+
+        <aside class="on-this-page" aria-label="本页目录">
+          <p>本页内容</p>
+          <a href="#overview">项目定位</a>
+          <a href="#quickstart">四步启动</a>
+          <a href="#admin-capabilities">后台能力</a>
+          <a href="#settings-and-tools">差异功能</a>
+          <a href="#frontend">前端选择</a>
+          <a href="#deployment">构建部署</a>
+          <a href="#security">安全规则</a>
+          <a href="#faq">常见问题</a>
+        </aside>
+      </main>
+    </div>
+  </body>
+</html>
