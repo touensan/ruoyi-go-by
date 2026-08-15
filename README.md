@@ -6,6 +6,10 @@
 `https://your-domain.example/docs/` 访问；文档页采用固定导航、搜索、目录、代码块和
 日间/夜间主题，面向开发者与部署人员说明启动、前端选择、差异功能和安全检查。
 
+### 使用文档
+
+![RuoYi-Go BY 使用指南](docs/screenshots/ruoyi-go-by-documentation.png)
+
 本仓库是一个可独立运行的开源代码副本，默认配置仅用于本地开发。部署前请修改数据库、Redis、JWT 密钥和所有默认账号配置。
 
 管理端现已默认使用 `Whiteyun Vue`（白云风格前端）。原有 `RuoYi Vue`
