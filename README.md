@@ -2,54 +2,17 @@
 
 一个基于 Go、Gin、GORM 和 Vue 3 的 RuoYi 风格后台管理系统示例。
 
-项目提供独立公共文档页：[RuoYi-Go BY 使用指南](frontend/docs/)，运行后可通过
-`https://your-domain.example/docs/` 访问；文档页采用固定导航、搜索、目录、代码块和
-日间/夜间主题，面向开发者与部署人员说明启动、前端选择、差异功能和安全检查。
-
-### 使用文档
-
-![RuoYi-Go BY 使用指南](docs/screenshots/ruoyi-go-by-documentation.png)
-
 本仓库是一个可独立运行的开源代码副本，默认配置仅用于本地开发。部署前请修改数据库、Redis、JWT 密钥和所有默认账号配置。
-
-管理端现已默认使用 `Whiteyun Vue`（白云风格前端）。原有 `RuoYi Vue`
-仍保留在仓库中供旧项目兼容选择，但后续功能、适配和视觉更新只维护
-`Whiteyun Vue`。
-
-## 版本与前端
-
-| 项目版本 | 默认前端 | 维护状态 |
-| --- | --- | --- |
-| `v1.4.0` | Whiteyun Vue | 当前版本，持续维护 |
-| `v1.3.0` | Whiteyun Vue | 用户与管理员共享工作台基线 |
-| `v1.2.0` | Whiteyun Vue | Whiteyun Vue 首个版本 |
-| `v1.1.2` | RuoYi Vue | 旧版前端基线，冻结兼容 |
-
-`v1.4.0` 在“用户工作台 + 管理能力叠加”架构上加入通用积分与兑换基础设施：普通用户只进入自己的
-工作台和账户菜单，管理员从同一工作台进入，并额外获得系统管理菜单。需要旧若依
-视觉时，请使用 `v1.1.2`，或在新版源码中显式选择冻结的 `frontend/ruoyi-vue`。
 
 ## 技术栈
 
-- 后端：Go 1.25+、Gin、GORM、MySQL 5.7+（兼容 MySQL 8）、Redis、JWT、excelize
-- 默认前端：Whiteyun Vue、Vue 3、Vite、TypeScript、Element Plus、Pinia、Vue Router、Axios
-- 兼容前端：RuoYi Vue，仅保留旧视觉与旧二次开发兼容
+- 后端：Go 1.25+、Gin、GORM、MySQL、Redis、JWT、excelize
+- 前端：Vue 3、Vite、TypeScript、Element Plus、Pinia、Vue Router、Axios
 
 ## 功能差异
 
 在 RuoYi 基础能力之外，本项目重点补充了以下后台功能：
 
-- **统一用户与管理员工作台**：所有登录账号共享用户工作台；`common` 角色只拥有
-  用户侧菜单，超级管理员额外拥有全部管理菜单，自定义管理员通过基础角色叠加管理
-  角色，不再维护两套割裂后台。
-- **直接用户菜单与分界线**：“我的服务”是侧边栏分界线，不是需要展开的父菜单；
-  控制台、服务市场、兑换中心、积分与订单和个人资料直接呈现。
-- **通用积分账户**：后端以百分之一积分保存余额精度，前台统一显示“积分”；支持
-  易支付充值、回调验签自动入账、人工调整和完整积分流水。
-- **任务与兑换中心**：任务奖励生成可转让兑换码，兑换时才进入持码人的积分账户；
-  服务端只保存兑换码 HMAC 摘要和掩码，不保存明文。
-- **可选雨云集成**：内置可开关的雨云任务提供商，通过 `X-Api-Key` 核验雨云下级
-  关系；默认关闭且不包含真实 API 密钥，不影响人工任务和其他提供商扩展。
 - **聚合系统配置**：在一个后台入口中提供站点、支付和邮箱三个配置标签页，支持 SEO、版权、Logo、备案和客服信息维护。
 - **支付配置与测试**：支持易支付 V1/V2，使用复选框配置支付宝和微信支付，并提供回调地址生成和功能测试入口；示例配置不包含任何商户密钥。
 - **邮箱配置与测试**：支持 SMTP、QQ 邮箱、Gmail 和自定义服务器，提供邮件发送测试，同时默认不填写任何真实凭据。
@@ -58,23 +21,23 @@
 
 ## 界面预览
 
-以下截图来自 [白云 R1-Go 演示站](https://r1-go.whiteyun.com/)，截图中的支付字段已脱敏，不包含生产账号、密钥或真实业务数据。
+以下截图使用 Chromium 在本地脱敏前端和演示数据生成，不包含生产账号或真实业务数据。
 
 ### 后台首页
 
-![后台首页](docs/screenshots/whiteyun-vue-dashboard.png)
+![后台首页](docs/screenshots/dashboard.png)
 
 ### 系统设置
 
-![系统设置](docs/screenshots/whiteyun-vue-system-settings.png)
+![系统设置](docs/screenshots/system-settings.png)
 
 ### 支付配置
 
-![支付配置](docs/screenshots/whiteyun-vue-payment-settings.png)
+![支付配置](docs/screenshots/payment-settings.png)
 
-### 菜单管理
+### 代码生成
 
-![菜单管理](docs/screenshots/whiteyun-vue-menu-management.png)
+![代码生成](docs/screenshots/code-generator.png)
 
 ## 后端运行
 
@@ -87,45 +50,24 @@ go run main.go
 
 ## 前端运行
 
-默认使用持续维护的 Whiteyun Vue：
-
 ```bash
-cd frontend/whiteyun-vue
+cd frontend/RuoYi-Vue3-ts
 cp .env.example .env.development
-npm ci
+npm install
 npm run dev
 ```
-
-需要旧若依视觉时，可改用 `frontend/ruoyi-vue`。两套前端的定位和构建方式见
-[frontend/README.md](frontend/README.md)。
 
 ## 构建
 
 ```bash
 go build -o ruoyi-go-by main.go
-frontend/build-admin.sh
-```
-
-如需构建冻结的旧版前端：
-
-```bash
-APIAUTH_ADMIN_FRONTEND=ruoyi-vue frontend/build-admin.sh
+cd frontend/RuoYi-Vue3-ts
+npm run build:prod
 ```
 
 ## 数据库
 
-`ruoyi.sql` 包含 RuoYi 基础表结构和本地开发示例数据。随后执行
-[`sql/upgrade/v1.4.0-points-exchange.sql`](sql/upgrade/v1.4.0-points-exchange.sql)
-即可安装积分与兑换基础设施。示例账号为 `admin`，密码为
-`change-me-before-production`，首次登录后必须立即修改。请不要把真实用户、支付、
-邮件或生产配置写入 SQL 文件。
-
-从 `v1.2.0` 升级时，先执行
-[`sql/upgrade/v1.3.0-user-workspace.sql`](sql/upgrade/v1.3.0-user-workspace.sql)。
-所有旧版本升级到 `v1.4.0` 时，再执行
-[`sql/upgrade/v1.4.0-points-exchange.sql`](sql/upgrade/v1.4.0-points-exchange.sql)。
-完整约定见
-[`docs/architecture/user-admin-workspace.md`](docs/architecture/user-admin-workspace.md)。
+`ruoyi.sql` 包含表结构和本地开发所需的示例初始化数据。示例账号为 `admin`，密码为 `change-me-before-production`，首次登录后必须立即修改。请不要把真实用户、支付、邮件或生产配置写入 SQL 文件。
 
 ## 安全说明
 
