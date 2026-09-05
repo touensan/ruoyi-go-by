@@ -1,0 +1,7 @@
+# RuoYi-Go BY 长期记忆
+
+公开仓库：`touensan/ruoyi-go-by`。后端 Go/Gin/GORM，MySQL/Redis；前端为 `frontend/RuoYi-Vue3-ts` 的原生若依 Vue 3。真实部署配置不纳入仓库。开始工作先阅读本文件与 `docs/ARCHITECTURE.md`，完成关键阶段后及时记录验证结果。
+
+## 2026-09-05｜统一后台与角色继承
+
+用户明确要求整个 `ruoyi-xxx-by` 系列不拆分用户端和管理端，采用同一后台及 RBAC。`admin` 单向继承启用的 `common` 功能授权；超级管理员全权限与显式角色数据范围保持原边界。生效授权和显式角色分配分开，前端、菜单/路由及接口规则一致。详细契约见 `docs/ARCHITECTURE.md`；实现及验证已完成，详细结果与命令见 `docs/DEVELOPMENT.md`。

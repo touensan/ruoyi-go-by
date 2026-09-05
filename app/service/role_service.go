@@ -210,11 +210,14 @@ func (s *RoleService) GetRoleListByUserId(userId int) []dto.RoleListResponse {
 func (s *RoleService) GetRoleKeysByUserId(userId int) []string {
 
 	roleKeys := make([]string, 0)
-
-	dal.Gorm.Model(model.SysRole{}).
-		Joins("JOIN sys_user_role ON sys_user_role.role_id = sys_role.role_id").
-		Where("sys_user_role.user_id = ? AND sys_role.status = ?", userId, constant.NORMAL_STATUS).
-		Pluck("sys_role.role_key", &roleKeys)
+	hasAdmin := false
+	for _, role := range EffectiveRoles(userId) {
+		roleKeys = append(roleKeys, role.RoleKey)
+		hasAdmin = hasAdmin || role.RoleKey == "admin"
+	}
+	if userId == 1 && !hasAdmin {
+		roleKeys = append(roleKeys, "admin")
+	}
 
 	return roleKeys
 }

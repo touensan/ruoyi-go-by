@@ -98,5 +98,5 @@ func LacksRole(userId int, roleKey string) bool {
 //
 // 例如：if HasAnyRoles(security.GetAuthUserId(ctx), []string{"user", "admin"}) { ... }
 func HasAnyRoles(userId int, roleKey []string) bool {
-	return (&service.UserService{}).UserHasPerms(userId, roleKey)
+	return (&service.UserService{}).UserHasRoles(userId, roleKey)
 }

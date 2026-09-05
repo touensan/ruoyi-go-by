@@ -3,7 +3,6 @@ package service
 import (
 	"ruoyi-go/app/dto"
 	"ruoyi-go/app/model"
-	"ruoyi-go/common/types/constant"
 	"ruoyi-go/framework/dal"
 )
 
@@ -358,29 +357,42 @@ func (s *UserService) UserHasDeptByDeptId(deptId int) bool {
 // 查询用户是否拥有某权限，拥有返回true
 func (s *UserService) UserHasPerms(userId int, perms []string) bool {
 
-	var count int64
-
-	dal.Gorm.Model(model.SysUserRole{}).
-		Joins("JOIN sys_role ON sys_user_role.role_id = sys_role.role_id AND sys_role.status = ?", constant.NORMAL_STATUS).
-		Joins("JOIN sys_role_menu ON sys_role_menu.role_id = sys_role.role_id").
-		Joins("JOIN sys_menu ON sys_menu.menu_id = sys_role_menu.menu_id AND sys_menu.status = ?", constant.NORMAL_STATUS).
-		Where("sys_role.delete_time IS NULL AND sys_menu.delete_time IS NULL").
-		Where("sys_user_role.user_id = ? AND sys_menu.perms IN ?", userId, perms).
-		Count(&count)
-
-	return count > 0
+	if userId <= 0 || len(perms) == 0 {
+		return false
+	}
+	grantedPerms := (&MenuService{}).GetPermsByUserId(userId)
+	for _, wanted := range perms {
+		if wanted == "" {
+			continue
+		}
+		for _, granted := range grantedPerms {
+			if userId == 1 || granted == wanted {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // 查询用户是否拥有某角色，拥有返回true
 func (s *UserService) UserHasRoles(userId int, roles []string) bool {
 
-	var count int64
-
-	dal.Gorm.Model(model.SysUserRole{}).
-		Joins("JOIN sys_role ON sys_user_role.role_id = sys_role.role_id AND sys_role.status = ?", constant.NORMAL_STATUS).
-		Where("sys_role.delete_time IS NULL").
-		Where("sys_user_role.user_id = ? AND sys_role.role_key IN ?", userId, roles).
-		Count(&count)
-
-	return count > 0
+	if userId <= 0 || len(roles) == 0 {
+		return false
+	}
+	keys := (&RoleService{}).GetRoleKeysByUserId(userId)
+	for _, wanted := range roles {
+		if wanted == "" {
+			continue
+		}
+		if userId == 1 {
+			return true
+		}
+		for _, key := range keys {
+			if key == wanted {
+				return true
+			}
+		}
+	}
+	return false
 }

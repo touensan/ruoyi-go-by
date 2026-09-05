@@ -88,7 +88,12 @@ var Data *Config
 
 func init() {
 
-	file, err := os.ReadFile("application.yaml")
+	// A fixture path lets tests avoid reading a deployment configuration.
+	path := os.Getenv("RUOYI_CONFIG_FILE")
+	if path == "" {
+		path = "application.yaml"
+	}
+	file, err := os.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
