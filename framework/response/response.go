@@ -107,3 +107,10 @@ func (r *Response) Json(ctx *gin.Context) {
 
 	ctx.JSON(r.Status, response)
 }
+
+// Unsupported reports unavailable functionality without acknowledging work that never ran.
+func Unsupported(ctx *gin.Context, feature string) {
+	NewError().SetStatus(501).SetCode(501).
+		SetMsg("当前 Go 主线尚未实现"+feature+"，未执行该操作").
+		SetData("supported", false).Json(ctx)
+}

@@ -1,6 +1,8 @@
-# RuoYi-Go BY 管理端
+# RuoYi-Go BY 统一后台前端
 
-基于 Vue 3、TypeScript、Vite 和 Element Plus 的管理端前端。
+普通用户与管理员使用同一套前端、登录和页面，按 RBAC 动态授权。当前功能与下载版本见 [项目说明](../../README.md) 和 [版本状态](../../docs/VERSIONS.md)。
+
+基于 Vue 3、TypeScript、Vite 和 Element Plus 的统一后台前端。
 
 ## 运行
 

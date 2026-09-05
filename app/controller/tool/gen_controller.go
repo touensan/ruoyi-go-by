@@ -1,9 +1,6 @@
 package toolcontroller
 
 import (
-	"archive/zip"
-	"bytes"
-	"net/http"
 	"os"
 	"ruoyi-go/config"
 	"ruoyi-go/framework/dal"
@@ -92,46 +89,35 @@ func (*GenController) Detail(ctx *gin.Context) {
 }
 
 func (*GenController) Update(ctx *gin.Context) {
-	response.NewSuccess().Json(ctx)
+	response.Unsupported(ctx, "代码生成与生成配置持久化")
 }
 
 func (*GenController) ImportTable(ctx *gin.Context) {
-	response.NewSuccess().Json(ctx)
+	response.Unsupported(ctx, "代码生成与生成配置持久化")
 }
 
 func (*GenController) CreateTable(ctx *gin.Context) {
-	response.NewSuccess().Json(ctx)
+	response.Unsupported(ctx, "代码生成与生成配置持久化")
 }
 
 func (*GenController) Preview(ctx *gin.Context) {
-	response.NewSuccess().SetData("data", gin.H{
-		"domain.go.vm":     "package model\n\n// 当前接口为 RuoYi-Go BY 兼容预览，占位展示数据库结构。\n",
-		"controller.go.vm": "package controller\n\n// 当前 ruoyi-go 基线未启用完整代码生成器。\n",
-		"vue/index.vue.vm": "<template><div>RuoYi-Go BY 代码生成预览</div></template>\n",
-	}).Json(ctx)
+	response.Unsupported(ctx, "代码生成与生成配置持久化")
 }
 
 func (*GenController) Remove(ctx *gin.Context) {
-	response.NewSuccess().Json(ctx)
+	response.Unsupported(ctx, "代码生成与生成配置持久化")
 }
 
 func (*GenController) GenCode(ctx *gin.Context) {
-	response.NewSuccess().SetMsg("当前 Go 基线未启用完整代码生成器，已接受生成请求").Json(ctx)
+	response.Unsupported(ctx, "代码生成与生成配置持久化")
 }
 
 func (*GenController) SynchDb(ctx *gin.Context) {
-	response.NewSuccess().Json(ctx)
+	response.Unsupported(ctx, "代码生成与生成配置持久化")
 }
 
 func (*GenController) BatchGenCode(ctx *gin.Context) {
-	var buffer bytes.Buffer
-	writer := zip.NewWriter(&buffer)
-	file, _ := writer.Create("README.txt")
-	_, _ = file.Write([]byte("RuoYi-Go BY 当前后端已提供代码生成下载占位接口。\n"))
-	_ = writer.Close()
-	ctx.Header("Content-Type", "application/zip")
-	ctx.Header("Content-Disposition", "attachment; filename=ruoyi.zip")
-	ctx.Data(http.StatusOK, "application/zip", buffer.Bytes())
+	response.Unsupported(ctx, "代码生成与生成配置持久化")
 }
 
 func listDatabaseTables(ctx *gin.Context) ([]genTable, int) {
