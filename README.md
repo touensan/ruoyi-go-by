@@ -6,7 +6,7 @@
 
 ## 当前源码与下载版本
 
-当前 `main` 是若依原生 Vue 3 主线，包含统一后台 RBAC；没有发布包含这些最新变更的新标签或运行包。`application-example.yaml` 中的 `1.1.2` 是可配置的基线版本字段，不能证明工作目录等同于 `v1.1.2` 标签。 完整对应关系见 [版本与下载状态](docs/VERSIONS.md)。
+当前原生若依主线稳定版本为 [v1.1.3](https://github.com/touensan/ruoyi-go-by/releases/tag/v1.1.3)，包含统一后台 RBAC 和能力状态修正。v1.2.0–v1.4.0 是 Whiteyun 历史支线，版本号较大但不代表当前主线；完整对应关系见 [版本与下载状态](docs/VERSIONS.md)。
 
 ## 统一后台
 
@@ -50,6 +50,8 @@
 ![代码生成](docs/screenshots/code-generator.png)
 
 ## 后端运行
+
+Release 包已包含 Linux x86_64 后端和构建后的前端。下载 `ruoyi-go-by-v1.1.3-linux-x86_64.tar.gz` 与 `SHA256SUMS` 校验后，复制并修改 `application-example.yaml` 即可准备运行。源码方式按下列步骤构建。
 
 ```bash
 cp application-example.yaml application.yaml
