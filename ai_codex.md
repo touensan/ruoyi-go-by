@@ -12,4 +12,4 @@
 
 ## 2026-09-08｜v1.1.3 原生主线 Release
 
-用户要求发布最新 main 对应下载包。为延续 v1.1.2 原生若依主线并避免与 v1.2.0–v1.4.0 Whiteyun 历史支线混淆，新版本定为 v1.1.3。运行包包含 Linux x86_64 后端、构建后的 Vue 前端、示例配置和数据库脚本；包内 `BUILD_INFO.json` 记录源码与产物摘要。实际发布地址、附件 SHA-256 和本轮验证结果以 GitHub Release 与 `docs/DEVELOPMENT.md` 最新记录为准；本次不部署业务站。
+用户要求发布最新 main 对应下载包。为延续 v1.1.2 原生若依主线并避免与 v1.2.0–v1.4.0 Whiteyun 历史支线混淆，新版本定为 v1.1.3。发布前更新 Axios、ECharts、js-cookie 与 glob，以清除本轮发现的前端生产依赖公告。运行包包含 Linux x86_64 后端、构建后的 Vue 前端、示例配置和数据库脚本；包内 `BUILD_INFO.json` 记录源码与产物摘要。实际发布地址、附件 SHA-256 和本轮验证结果以 GitHub Release 与 `docs/DEVELOPMENT.md` 最新记录为准；本次不部署业务站。
