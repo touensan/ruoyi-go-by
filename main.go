@@ -68,6 +68,7 @@ func main() {
 	}
 
 	// 设置模式
+	listenHost := ""
 	if port := os.Getenv("RUOYI_PORT"); port != "" {
 		parsed, err := strconv.Atoi(port)
 		if err != nil || parsed < 1 || parsed > 65535 {
@@ -75,6 +76,7 @@ func main() {
 		}
 		config.Data.Server.Port = parsed
 		config.Data.Server.Host = "127.0.0.1"
+		listenHost = "127.0.0.1"
 	}
 	gin.SetMode(config.Data.Server.Mode)
 
@@ -128,7 +130,7 @@ func main() {
 	// 注册路由
 	router.Register(server)
 
-	httpServer := &http.Server{Addr: net.JoinHostPort(config.Data.Server.Host, strconv.Itoa(config.Data.Server.Port)), Handler: server}
+	httpServer := &http.Server{Addr: net.JoinHostPort(listenHost, strconv.Itoa(config.Data.Server.Port)), Handler: server}
 	stopped := make(chan os.Signal, 1)
 	signal.Notify(stopped, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
