@@ -1,6 +1,6 @@
 # 单机平滑更新
 
-当前 `main` 提供单机双端口更新工具；v1.1.3 及以前的下载包没有此能力。它只处理应用版本更新，不保证机器、MySQL、Redis 故障时继续服务。
+v1.1.4 提供单机双端口更新工具；v1.1.3 及以前的下载包没有此能力。它只处理应用版本更新，不保证机器、MySQL、Redis 故障时继续服务。
 
 ## 原理与首次接入
 
@@ -14,7 +14,7 @@
 
 ```sh
 python3 deploy/smooth-release.py --config /private/release.json adopt legacy /old/runtime
-python3 deploy/smooth-release.py --config /private/release.json prepare release-yyyymmdd /build/ruoyi-go-by.tar.gz ARCHIVE_SHA256 1.1.3
+python3 deploy/smooth-release.py --config /private/release.json prepare release-yyyymmdd /build/ruoyi-go-by.tar.gz ARCHIVE_SHA256 1.1.4
 python3 deploy/smooth-release.py --config /private/release.json start release-yyyymmdd
 python3 deploy/smooth-release.py --config /private/release.json switch release-yyyymmdd
 python3 deploy/smooth-release.py --config /private/release.json status

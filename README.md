@@ -6,7 +6,7 @@
 
 ## 当前源码与下载版本
 
-当前原生若依主线稳定版本为 [v1.1.3](https://github.com/touensan/ruoyi-go-by/releases/tag/v1.1.3)，包含统一后台 RBAC 和能力状态修正。v1.2.0–v1.4.0 是 Whiteyun 历史支线，版本号较大但不代表当前主线；完整对应关系见 [版本与下载状态](docs/VERSIONS.md)。
+当前原生若依主线稳定版本为 [v1.1.4](https://github.com/touensan/ruoyi-go-by/releases/tag/v1.1.4)，包含统一后台 RBAC、能力状态修正和单机平滑更新工具。v1.2.0–v1.4.0 是 Whiteyun 历史支线，版本号较大但不代表当前主线；完整对应关系见 [版本与下载状态](docs/VERSIONS.md)。
 
 ## 统一后台
 
@@ -51,7 +51,7 @@
 
 ## 后端运行
 
-Release 包已包含 Linux x86_64 后端和构建后的前端。下载 `ruoyi-go-by-v1.1.3-linux-x86_64.tar.gz` 与 `SHA256SUMS` 校验后，复制并修改 `application-example.yaml` 即可准备运行。源码方式按下列步骤构建。
+Release 包已包含 Linux x86_64 后端和构建后的前端。下载 `ruoyi-go-by-v1.1.4-linux-x86_64.tar.gz` 与 `SHA256SUMS` 校验后，复制并修改 `application-example.yaml` 即可准备运行。源码方式按下列步骤构建。
 
 ```bash
 cp application-example.yaml application.yaml
@@ -77,7 +77,7 @@ cd frontend/RuoYi-Vue3-ts
 npm run build:prod
 ```
 
-生产更新采用候选进程就绪、Nginx 平滑切流、旧进程排空后退出的流程。操作方法与兼容边界见 [平滑更新说明](docs/SMOOTH_RELEASE.md)。当前 main 含实现；v1.1.3 历史下载包不含本流程。
+生产更新采用候选进程就绪、Nginx 平滑切流、旧进程排空后退出的流程。操作方法与兼容边界见 [平滑更新说明](docs/SMOOTH_RELEASE.md)。v1.1.4 运行包已包含本流程。
 
 ## 数据库
 

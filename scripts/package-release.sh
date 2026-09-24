@@ -6,7 +6,7 @@ output_dir=${1:?output directory required}
 binary=${2:?Go binary required}
 frontend_dist=${3:?frontend dist required}
 build_info=${4:?BUILD_INFO.json required}
-version=${5:-1.1.3}
+version=${5:-1.1.4}
 
 test -x "$binary"
 test -f "$frontend_dist/index.html"
