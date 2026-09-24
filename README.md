@@ -77,6 +77,8 @@ cd frontend/RuoYi-Vue3-ts
 npm run build:prod
 ```
 
+生产更新采用候选进程就绪、Nginx 平滑切流、旧进程排空后退出的流程。操作方法与兼容边界见 [平滑更新说明](docs/SMOOTH_RELEASE.md)。当前 main 含实现；v1.1.3 历史下载包不含本流程。
+
 ## 数据库
 
 `ruoyi.sql` 包含表结构和本地开发所需的示例初始化数据。示例账号为 `admin`，密码为 `change-me-before-production`，首次登录后必须立即修改。请不要把真实用户、支付、邮件或生产配置写入 SQL 文件。

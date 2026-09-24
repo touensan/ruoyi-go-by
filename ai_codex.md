@@ -13,3 +13,7 @@
 ## 2026-09-08｜v1.1.3 原生主线 Release
 
 用户要求发布最新 main 对应下载包。为延续 v1.1.2 原生若依主线并避免与 v1.2.0–v1.4.0 Whiteyun 历史支线混淆，新版本定为 v1.1.3。发布前更新 Axios、ECharts、js-cookie 与 glob，以清除本轮发现的前端生产依赖公告。运行包包含 Linux x86_64 后端、构建后的 Vue 前端、示例配置和数据库脚本；包内 `BUILD_INFO.json` 记录源码与产物摘要。实际发布地址、附件 SHA-256 和本轮验证结果以 GitHub Release 与 `docs/DEVELOPMENT.md` 最新记录为准；本次不部署业务站。
+
+## 2026-09-24｜单机平滑更新源码
+
+用户要求参考 MOX 项目的蓝绿发布方式，改造 Go/Rust 公开仓库；PHP 仓库仅拉取核对。当前 Go main 已加入回环私有就绪检查、SIGTERM 优雅退出、候选端口覆盖及关闭候选自动建表的开关；发布工具与兼容边界见 `docs/SMOOTH_RELEASE.md`。旧 v1.1.3 附件未改，新流程尚未在业务站点部署。验证结论见 `docs/DEVELOPMENT.md`，不得把 Python 工具自测等同于正式生产切流验收。

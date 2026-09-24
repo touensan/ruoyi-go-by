@@ -32,7 +32,7 @@ function start() {
 function stop() {
     pid=`ps -ef | grep $APP | grep -v grep | awk '{print $2}'`
     if [ -n "${pid}" ]; then
-        kill -9 ${pid}
+        kill -TERM ${pid}
         echo "${APP} stop success"
     else
         echo "${APP} is not running"
@@ -41,8 +41,8 @@ function stop() {
 
 # 重启程序
 function restart() {
-    stop
-    start
+    echo "生产更新请使用 deploy/smooth-release.py；restart 会中断现有请求" >&2
+    exit 1
 }
 
 

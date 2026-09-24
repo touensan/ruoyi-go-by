@@ -1,0 +1,22 @@
+{
+  "state_dir": "/opt/ruoyi-go-by/deployment",
+  "releases_dir": "/opt/ruoyi-go-by/releases",
+  "assets_dir": "/opt/ruoyi-go-by/shared/assets",
+  "shared_uploads": "/opt/ruoyi-go-by/shared/uploads",
+  "env_file": "/opt/ruoyi-go-by/private/service.env",
+  "systemd_dir": "/etc/systemd/system",
+  "service_prefix": "ruoyi-go-by",
+  "user": "ruoyi",
+  "group": "ruoyi",
+  "binary": "ruoyi-go-by",
+  "web_assets": "web/admin/assets",
+  "upload_path": "runtime/uploads",
+  "ports": [6555, 6556, 6557],
+  "nginx_include": "/etc/nginx/snippets/ruoyi-go-by-release.conf",
+  "nginx_bin": "/usr/sbin/nginx",
+  "nginx_config": "/etc/nginx/nginx.conf",
+  "nginx_pid": "/run/nginx.pid",
+  "host": "admin.example.com",
+  "probe_origin": "http://127.0.0.1",
+  "smoke_paths": ["/admin/", "/api/captchaImage"]
+}

@@ -36,3 +36,10 @@ npm run build:prod
 - 前端将 Axios、ECharts、js-cookie 与 glob 更新到修复版本；Node 22.22.0 上 7 项 RBAC 测试及生产构建通过，`npm audit --omit=dev` 为 0 项报告。
 - Linux x86_64 后端为静态、去除调试符号的 ELF。运行包包含该二进制、构建后的前端、示例配置、SQL 与文档，不含 `application.yaml`、真实凭据、上传、日志、Node 依赖目录或项目记忆。
 - 运行包按源码和构建规格生成不可变缓存，再以只读凭据取回核对；GitHub 附件另行下载验证。v1.1.3 延续原生若依 v1.1.2 主线，v1.2.0–v1.4.0 仍是 Whiteyun 历史支线；发布不代表任何业务站点已部署。
+
+## 2026-09-24｜单机平滑更新源码
+
+- 新增 `deploy/smooth-release.py`、双端口配置模板和 `SMOOTH_RELEASE.md`；Go 候选可关闭启动时的自动建表，`/internal/ready` 检查 MySQL/Redis，SIGTERM 等待在途 HTTP 请求。修正旧 `service.sh` 强杀及重启路径，并修正示例 YAML 中 `user.password` 的层级，保证示例可解析。
+- 打包脚本追加 `FILE_SHA256SUMS`；工具对归档、逐文件、Linux x86_64 二进制、静态资源同名内容及上传目录执行检查。旧版本页面的 hash 静态资源保留。旧 v1.1.3 包未改，生产业务站未部署。
+- 深圳隔离构建节点检查前磁盘可用约 118 GiB/inode 17%、可用内存约 10.5 GiB；本机仅约 2.8 GiB available 且 swap 占用高，因此使用隔离 Go 缓存与测试目录。`RUOYI_CONFIG_FILE` 指向仓库空测试配置时 `go test -p 2 ./...` 通过；示例 YAML 解析测试 `go test ./config` 通过。未设置测试 MySQL DSN，数据库 RBAC 用例未作真实数据库回归。
+- Python 发布工具 3 项完整性/准备测试通过；隔离 Nginx 片段 `nginx -t` 通过；隔离双后端切流演练中，一条旧慢请求正常结束，新请求抵达候选。尚未针对真实站点、支付回调或海量并发做生产验收。

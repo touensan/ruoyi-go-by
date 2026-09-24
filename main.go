@@ -1,14 +1,20 @@
 package main
 
 import (
+	"context"
 	"log"
+	"net"
 	"net/http"
+	"os"
+	"os/signal"
 	"ruoyi-go/app/router"
 	"ruoyi-go/app/service"
 	"ruoyi-go/config"
 	"ruoyi-go/framework/dal"
 	"strconv"
 	"strings"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -54,11 +60,22 @@ func main() {
 		},
 	})
 
-	if err := service.EnsureSystemSettingBaseline(); err != nil {
-		log.Printf("初始化系统配置失败: %v", err)
+	// Production releases must migrate explicitly, before either version starts.
+	if os.Getenv("RUOYI_AUTO_SETUP") != "false" {
+		if err := service.EnsureSystemSettingBaseline(); err != nil {
+			log.Fatalf("初始化系统配置失败: %v", err)
+		}
 	}
 
 	// 设置模式
+	if port := os.Getenv("RUOYI_PORT"); port != "" {
+		parsed, err := strconv.Atoi(port)
+		if err != nil || parsed < 1 || parsed > 65535 {
+			log.Fatal("RUOYI_PORT 无效")
+		}
+		config.Data.Server.Port = parsed
+		config.Data.Server.Host = "127.0.0.1"
+	}
 	gin.SetMode(config.Data.Server.Mode)
 
 	// 初始化gin
@@ -66,6 +83,27 @@ func main() {
 
 	// 使用恢复中间件
 	server.Use(gin.Recovery())
+	server.GET("/internal/ready", func(ctx *gin.Context) {
+		host, _, err := net.SplitHostPort(ctx.Request.RemoteAddr)
+		if err != nil || net.ParseIP(host) == nil || !net.ParseIP(host).IsLoopback() {
+			ctx.Status(http.StatusNotFound)
+			return
+		}
+		check, cancel := context.WithTimeout(ctx.Request.Context(), 2*time.Second)
+		defer cancel()
+		db, err := dal.Gorm.DB()
+		if err == nil {
+			err = db.PingContext(check)
+		}
+		if err == nil {
+			err = dal.Redis.Ping(check).Err()
+		}
+		if err != nil {
+			ctx.Status(http.StatusServiceUnavailable)
+			return
+		}
+		ctx.JSON(http.StatusOK, gin.H{"status": "ok", "version": config.Data.Ruoyi.Version})
+	})
 
 	// 托管 RuoYi-Vue3-ts 管理后台。前端使用 history 路由，刷新 /admin/* 时回退到 index.html。
 	server.Any("/", func(ctx *gin.Context) {
@@ -90,5 +128,18 @@ func main() {
 	// 注册路由
 	router.Register(server)
 
-	server.Run(":" + strconv.Itoa(config.Data.Server.Port))
+	httpServer := &http.Server{Addr: net.JoinHostPort(config.Data.Server.Host, strconv.Itoa(config.Data.Server.Port)), Handler: server}
+	stopped := make(chan os.Signal, 1)
+	signal.Notify(stopped, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		<-stopped
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+		defer cancel()
+		if err := httpServer.Shutdown(ctx); err != nil {
+			log.Printf("优雅退出失败: %v", err)
+		}
+	}()
+	if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Fatal(err)
+	}
 }

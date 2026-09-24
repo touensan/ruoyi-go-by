@@ -35,6 +35,6 @@ token:
   expireTime: 30
 
 user:
-  password: change-me-before-production
-  maxRetryCount: 5
-  lockTime: 10
+  password:
+    maxRetryCount: 5
+    lockTime: 10
