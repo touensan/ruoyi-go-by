@@ -25,7 +25,7 @@ done
 cp -a "$project_dir/docs" "$stage/"
 cp -a "$project_dir/deploy" "$stage/"
 cp "$build_info" "$stage/BUILD_INFO.json"
-(cd "$stage" && find . -type f -print0 | sort -z | xargs -0 sha256sum > FILE_SHA256SUMS)
+(cd "$stage" && find . -type f ! -name FILE_SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > FILE_SHA256SUMS)
 
 archive="$output_dir/ruoyi-go-by-v${version}-linux-x86_64.tar.gz"
 tar -C "$stage" --sort=name --mtime='@0' --owner=0 --group=0 --numeric-owner -czf "$archive" .
